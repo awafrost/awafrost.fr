@@ -1,0 +1,12 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+  <!-- Roblox logo - Red and black blocks -->
+  <rect x="8" y="8" width="12" height="12" fill="#E4405E" />
+  <rect x="24" y="8" width="12" height="12" fill="#E4405E" />
+  <rect x="40" y="8" width="12" height="12" fill="#E4405E" />
+  <rect x="8" y="24" width="12" height="12" fill="#E4405E" />
+  <rect x="24" y="24" width="12" height="12" fill="#000000" />
+  <rect x="40" y="24" width="12" height="12" fill="#E4405E" />
+  <rect x="8" y="40" width="12" height="12" fill="#E4405E" />
+  <rect x="24" y="40" width="12" height="12" fill="#E4405E" />
+  <rect x="40" y="40" width="12" height="12" fill="#E4405E" />
+</svg>
