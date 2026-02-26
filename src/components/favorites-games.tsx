@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaUsers, FaEye } from 'react-icons/fa';
+import Image from 'next/image';
 
 interface Game {
   placeId: number;
@@ -92,22 +93,28 @@ export function FavoritesGames({ gameIds }: FavoritesGamesProps) {
             {/* Image du jeu */}
             <div className="relative w-full h-40 bg-muted/50 overflow-hidden">
               {game.imageUrl ? (
-                <img
+                <Image
                   src={game.imageUrl}
                   alt={game.name}
+                  width={480}
+                  height={270}
                   className="w-full h-full object-cover transition-transform group-hover:scale-110"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                   }}
+                  unoptimized
                 />
               ) : game.imageToken ? (
-                <img
+                <Image
                   src={`https://www.roblox.com/game-media?assetId=${game.imageToken}&width=480&height=270&format=png`}
                   alt={game.name}
+                  width={480}
+                  height={270}
                   className="w-full h-full object-cover transition-transform group-hover:scale-110"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                   }}
+                  unoptimized
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-muted-foreground">

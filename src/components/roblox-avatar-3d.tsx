@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface RobloxAvatar3DProps {
   userId: string;
@@ -94,16 +95,17 @@ export function RobloxAvatar3D({ userId, className = '', width = 150, height = 1
               <span className='text-xs text-muted-foreground'>Chargement...</span>
             </div>
           ) : avatarUrl ? (
-            <img
+            <Image
               src={avatarUrl}
-              alt='Avatar Roblox'
+              alt="Avatar Roblox"
               width={width}
               height={height}
               className='w-full h-full pointer-events-none object-cover'
+              unoptimized
             />
           ) : (
             <div className='w-full h-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-muted-foreground'>
-              Pas d'avatar
+              Pas d&apos;avatar
             </div>
           )}
         </div>
