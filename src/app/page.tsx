@@ -85,7 +85,7 @@ export default function Home() {
                   <Image width={20} height={20} src='/icons/roblox-logo.svg' alt='Roblox' />
                 </a>
                 <a
-                  href='https://discord.gg/wF96KxcNpT'
+                  href='https://discord.gg/WgBTgHyjag'
                   target='_blank'
                   rel='noreferrer'
                   className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
