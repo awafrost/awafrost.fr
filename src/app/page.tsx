@@ -7,9 +7,11 @@ import { FavoritesGames } from '@/components/favorites-games';
 import { GroupCard } from '@/components/group-card';
 import { RobloxProfile } from '@/components/roblox-profile';
 import { ProfileModal } from '@/components/profile-modal';
-import { StarsRain } from '@/components/stars-rain';
 import { BouncingCat } from '@/components/bouncing-cat';
+import AffiliationSection from '@/components/affiliate-section';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import {
   FaDiscord,
@@ -22,10 +24,10 @@ export default function Home() {
   const FAVORITE_GAMES = [286090429, 606849621, 142823291];
   const GROUP_ID = 13212005;
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <main className='container space-y-8 py-6 lg:my-10 relative'>
-      <StarsRain />
       <BouncingCat />
       <FadeUpStagger>
         {/* En-tête avec toggle de thème */}
@@ -113,6 +115,11 @@ export default function Home() {
         {/* Jeux Favoris - Full width */}
         <FadeUpDiv className='col-span-12'>
           <FavoritesGames gameIds={FAVORITE_GAMES} />
+        </FadeUpDiv>
+
+        {/* Section Affiliation */}
+        <FadeUpDiv className='col-span-12'>
+          <AffiliationSection />
         </FadeUpDiv>
       </FadeUpStagger>
 

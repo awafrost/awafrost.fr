@@ -38,7 +38,11 @@ export function FavoritesGames({ gameIds }: FavoritesGamesProps) {
     const fetchGames = async () => {
       try {
         const res = await fetch(`/api/roblox/games?gameIds=${gameIds.join(',')}`);
-        if (!res.ok) throw new Error('Failed to fetch games');
+        if (!res.ok) {
+          const errorData = await res.json();
+          console.error('FavoritesGames API Error:', errorData);
+          throw new Error(`Failed to fetch games: ${res.status}`);
+        }
         const data = await res.json();
         setGames(data.games || []);
       } catch (err) {
@@ -51,6 +55,8 @@ export function FavoritesGames({ gameIds }: FavoritesGamesProps) {
 
     if (gameIds.length > 0) {
       fetchGames();
+    } else {
+      setLoading(false);
     }
   }, [gameIds, isMounted]);
 
@@ -73,7 +79,20 @@ export function FavoritesGames({ gameIds }: FavoritesGamesProps) {
     );
   }
 
-  if (games.length === 0) return null;
+  if (!gameIds || gameIds.length === 0) {
+    return null;
+  }
+
+  if (games.length === 0) {
+    return (
+      <div className="space-y-4 rounded-xl border bg-card p-6">
+        <h2 className="text-2xl font-bold">Mes Jeux Favoris</h2>
+        <p className="text-muted-foreground">
+          Les jeux favoris n&apos;ont pas pu être chargés. Vérifiez que les IDs sont corrects.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
