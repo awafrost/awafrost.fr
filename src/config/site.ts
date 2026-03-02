@@ -3,7 +3,7 @@ import { SiteConfig } from '@/types';
 export const siteConfig: SiteConfig = {
   metadata: {
     name: 'Frost',
-    description: 'Créateur de contenu amateur',
+    description: 'Une petite pomme pour celui du fond',
     twitter_id: '@awafrost',
     url: new URL(
       process.env.NEXT_PUBLIC_VERCEL_URL
