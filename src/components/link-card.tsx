@@ -9,27 +9,22 @@ interface LinkCardProps extends React.HTMLAttributes<HTMLDivElement> {
   href: string;
 }
 
-const LinkCard = React.forwardRef<HTMLDivElement, LinkCardProps>(
+const LinkCard = React.forwardRef<HTMLButtonElement, LinkCardProps>(
   ({ className, children, href }, ref) => {
     const handleClick = () => {
-      window.open(href, '_blank');
+      window.location.href = href;
     };
     return (
-      <motion.div
-        ref={ref}
+      <motion.button
+        ref={ref as any}
         className={cn('rounded-xl border bg-card text-card-foreground shadow cursor-pointer', className)}
         onClick={handleClick}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            handleClick();
-          }
-        }}
+        onTouchEnd={handleClick}
         variants={FADE_UP_ANIMATION_VARIANTS}
+        style={{ pointerEvents: 'auto' }}
       >
         {children}
-      </motion.div>
+      </motion.button>
     );
   },
 );

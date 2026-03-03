@@ -65,8 +65,10 @@ export default function AffiliationSection() {
           </Link>
         )}
         <button
-          onClick={() => window.open('https://discord.gg/WgBTgHyjag', '_blank')}
+          onClick={() => window.location.href = 'https://discord.gg/WgBTgHyjag'}
+          onTouchEnd={() => window.location.href = 'https://discord.gg/WgBTgHyjag'}
           className="px-6 py-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-center font-semibold cursor-pointer"
+          style={{ pointerEvents: 'auto' }}
         >
           Rejoindre le Discord
         </button>
