@@ -181,37 +181,31 @@ export default function AffiliatePage() {
               {/* Réseaux sociaux */}
               <div className='flex gap-3 justify-center'>
                 {affiliate?.youtube?.url && (
-                  <a
-                    href={affiliate.youtube.url}
-                    target='_blank'
-                    rel='noreferrer'
-                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
+                  <button
+                    onClick={() => affiliate.youtube && window.open(affiliate.youtube.url, '_blank')}
+                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer'
                     title='YouTube'
                   >
                     <FaYoutube className='text-white' size={20} />
-                  </a>
+                  </button>
                 )}
                 {affiliate?.twitter?.url && (
-                  <a
-                    href={affiliate.twitter.url}
-                    target='_blank'
-                    rel='noreferrer'
-                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
+                  <button
+                    onClick={() => affiliate.twitter && window.open(affiliate.twitter.url, '_blank')}
+                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer'
                     title='Twitter'
                   >
                     <FaTwitter className='text-white' size={20} />
-                  </a>
+                  </button>
                 )}
                 {affiliate?.roblox?.userId && (
-                  <a
-                    href={`https://www.roblox.com/users/${affiliate.roblox.userId}/profile`}
-                    target='_blank'
-                    rel='noreferrer'
-                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
+                  <button
+                    onClick={() => affiliate.roblox && window.open(`https://www.roblox.com/users/${affiliate.roblox.userId}/profile`, '_blank')}
+                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer'
                     title='Roblox'
                   >
                     <Image width={20} height={20} src='/icons/roblox-logo.svg' alt='Roblox' />
-                  </a>
+                  </button>
                 )}
                 <button
                   onClick={handleDiscordClick}

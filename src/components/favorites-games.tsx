@@ -98,13 +98,22 @@ export function FavoritesGames({ gameIds }: FavoritesGamesProps) {
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Mes Jeux Favoris</h2>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {games.map((game, index) => (
-          <motion.a
+        {games.map((game, index) => {
+          const handleGameClick = () => {
+            window.open(`https://www.roblox.com/games/${game.placeId}`, '_blank');
+          };
+          return (
+          <motion.div
             key={game.placeId}
-            href={`https://www.roblox.com/games/${game.placeId}`}
-            target="_blank"
-            rel="noreferrer"
-            className="group rounded-xl border bg-card overflow-hidden transition-all hover:border-primary hover:shadow-lg"
+            onClick={handleGameClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleGameClick();
+              }
+            }}
+            className="group rounded-xl border bg-card overflow-hidden transition-all hover:border-primary hover:shadow-lg cursor-pointer"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
@@ -172,8 +181,9 @@ export function FavoritesGames({ gameIds }: FavoritesGamesProps) {
                 </div>
               )}
             </div>
-          </motion.a>
-        ))}
+          </motion.div>
+        );
+        })}
       </div>
     </div>
   );

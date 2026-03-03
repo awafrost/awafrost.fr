@@ -58,12 +58,21 @@ export function GroupCard({ groupId }: GroupCardProps) {
 
   if (!group) return null;
 
+  const handleClick = () => {
+    window.open(`https://www.roblox.com/communities/${groupId}/about`, '_blank');
+  };
+
   return (
-    <motion.a
-      href={`https://www.roblox.com/communities/${groupId}/about`}
-      target="_blank"
-      rel="noreferrer"
-      className="rounded-lg border bg-card p-4 transition-colors hover:border-primary block"
+    <motion.div
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          handleClick();
+        }
+      }}
+      className="rounded-lg border bg-card p-4 transition-colors hover:border-primary block cursor-pointer"
       whileHover={{ scale: 1.02 }}
     >
       <div className="space-y-2">
@@ -73,6 +82,6 @@ export function GroupCard({ groupId }: GroupCardProps) {
           <p className="flex items-center gap-2"><FaUsers className="w-4 h-4" /> {group.memberCount?.toLocaleString() || '0'} membres</p>
         </div>
       </div>
-    </motion.a>
+    </motion.div>
   );
 }

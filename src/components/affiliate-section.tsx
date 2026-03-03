@@ -64,14 +64,12 @@ export default function AffiliationSection() {
             Créer Mon Lien d&apos;Affiliation
           </Link>
         )}
-        <a
-          href="https://discord.gg/WgBTgHyjag"
-          target="_blank"
-          rel="noreferrer"
-          className="px-6 py-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-center font-semibold"
+        <button
+          onClick={() => window.open('https://discord.gg/WgBTgHyjag', '_blank')}
+          className="px-6 py-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-center font-semibold cursor-pointer"
         >
           Rejoindre le Discord
-        </a>
+        </button>
       </div>
     </section>
   );
