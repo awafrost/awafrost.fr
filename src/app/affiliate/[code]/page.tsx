@@ -203,23 +203,27 @@ export default function AffiliatePage() {
                   </a>
                 )}
                 {affiliate?.roblox?.userId && (
-                  <a
-                    href={`https://www.roblox.com/users/${affiliate.roblox.userId}/profile`}
-                    target='_self'
-                    rel='noreferrer'
-                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
+                  <button
+                    onClick={() => {
+                      if (affiliate.roblox?.userId) {
+                        window.open(`https://www.roblox.com/users/${affiliate.roblox.userId}/profile`, '_blank');
+                      }
+                    }}
+                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer'
                     title='Roblox'
                   >
                     <Image width={20} height={20} src='/icons/roblox-logo.svg' alt='Roblox' />
-                  </a>
+                  </button>
                 )}
-                <button
-                  onClick={handleDiscordClick}
+                <a
+                  href={affiliate?.discordInvite}
+                  target='_self'
+                  rel='noreferrer'
                   className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
                   title='Discord'
                 >
                   <FaDiscord className='text-white' size={20} />
-                </button>
+                </a>
               </div>
             </div>
           </FadeUpDiv>
@@ -242,15 +246,16 @@ export default function AffiliatePage() {
           </FadeUpDiv>
         )}
 
-        {/* Bouton Discord Principal */}
         <FadeUpDiv>
-          <button
-            onClick={handleDiscordClick}
-            className='w-full py-4 rounded-xl border bg-card hover:bg-muted transition-colors font-semibold flex items-center justify-center gap-2'
+          <a
+            href={affiliate?.discordInvite}
+            target='_self'
+            rel='noreferrer'
+            className='w-full py-4 rounded-xl border bg-card hover:bg-muted transition-colors font-semibold flex items-center justify-center gap-2 block'
           >
             <FaDiscord size={24} />
             Rejoindre le serveur Discord
-          </button>
+          </a>
         </FadeUpDiv>
       </FadeUpStagger>
       </div>
