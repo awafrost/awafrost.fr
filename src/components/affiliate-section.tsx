@@ -64,14 +64,14 @@ export default function AffiliationSection() {
             Créer Mon Lien d&apos;Affiliation
           </Link>
         )}
-        <button
-          onClick={() => window.location.href = 'https://discord.gg/WgBTgHyjag'}
-          onTouchEnd={() => window.location.href = 'https://discord.gg/WgBTgHyjag'}
-          className="px-6 py-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-center font-semibold cursor-pointer"
-          style={{ pointerEvents: 'auto' }}
+        <a
+          href='https://discord.gg/WgBTgHyjag'
+          target='_self'
+          rel='noreferrer'
+          className="px-6 py-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors text-center font-semibold block"
         >
           Rejoindre le Discord
-        </button>
+        </a>
       </div>
     </section>
   );

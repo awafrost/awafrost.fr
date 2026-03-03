@@ -181,37 +181,37 @@ export default function AffiliatePage() {
               {/* Réseaux sociaux */}
               <div className='flex gap-3 justify-center'>
                 {affiliate?.youtube?.url && (
-                  <button
-                    onClick={() => affiliate.youtube && (window.location.href = affiliate.youtube.url)}
-                    onTouchEnd={() => affiliate.youtube && (window.location.href = affiliate.youtube.url)}
-                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer'
+                  <a
+                    href={affiliate.youtube.url}
+                    target='_self'
+                    rel='noreferrer'
+                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
                     title='YouTube'
-                    style={{ pointerEvents: 'auto' }}
                   >
                     <FaYoutube className='text-white' size={20} />
-                  </button>
+                  </a>
                 )}
                 {affiliate?.twitter?.url && (
-                  <button
-                    onClick={() => affiliate.twitter && (window.location.href = affiliate.twitter.url)}
-                    onTouchEnd={() => affiliate.twitter && (window.location.href = affiliate.twitter.url)}
-                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer'
+                  <a
+                    href={affiliate.twitter.url}
+                    target='_self'
+                    rel='noreferrer'
+                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
                     title='Twitter'
-                    style={{ pointerEvents: 'auto' }}
                   >
                     <FaTwitter className='text-white' size={20} />
-                  </button>
+                  </a>
                 )}
                 {affiliate?.roblox?.userId && (
-                  <button
-                    onClick={() => affiliate.roblox && (window.location.href = `https://www.roblox.com/users/${affiliate.roblox.userId}/profile`)}
-                    onTouchEnd={() => affiliate.roblox && (window.location.href = `https://www.roblox.com/users/${affiliate.roblox.userId}/profile`)}
-                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer'
+                  <a
+                    href={`https://www.roblox.com/users/${affiliate.roblox.userId}/profile`}
+                    target='_self'
+                    rel='noreferrer'
+                    className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
                     title='Roblox'
-                    style={{ pointerEvents: 'auto' }}
                   >
                     <Image width={20} height={20} src='/icons/roblox-logo.svg' alt='Roblox' />
-                  </button>
+                  </a>
                 )}
                 <button
                   onClick={handleDiscordClick}
