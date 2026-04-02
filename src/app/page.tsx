@@ -1,134 +1,62 @@
-'use client';
-
-import { FadeUpDiv, FadeUpStagger } from '@/components/animation';
-import { ThemeToggle } from '@/components/theme-toggle';
-import { RobloxAvatar3D } from '@/components/roblox-avatar-3d';
-import { FavoritesGames } from '@/components/favorites-games';
-import { GroupCard } from '@/components/group-card';
-import { RobloxProfile } from '@/components/roblox-profile';
-import { ProfileModal } from '@/components/profile-modal';
-import { BouncingCat } from '@/components/bouncing-cat';
-import AffiliationSection from '@/components/affiliate-section';
-import { useSession } from 'next-auth/react';
+import { RobloxLayout } from '@/components/roblox-layout';
+import { RobloxFriends } from '@/components/roblox-friends';
+import { UserGroups } from '@/components/user-groups';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import {
-  FaDiscord,
-  FaTwitter,
-  FaYoutube,
-} from 'react-icons/fa';
 
 export default function Home() {
-  const ROBLOX_USER_ID = '1743461749';
-  const FAVORITE_GAMES = [286090429, 606849621, 142823291];
-  const GROUP_ID = 13212005;
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const { data: session } = useSession();
+  const USER_ID = '1743461749';
 
   return (
-    <main className='container space-y-8 py-6 lg:my-10 relative'>
-      <BouncingCat />
-      <FadeUpStagger>
-        {/* En-tête avec toggle de thème */}
-        <div className='flex h-16 items-center justify-end'>
-          <ThemeToggle />
+    <RobloxLayout>
+      <div className="flex gap-8 max-w-7xl mx-auto h-full relative w-full">
+        {/* COLONNE GAUCHE (Contenu Principal) */}
+        <div className="flex-1 space-y-12 min-w-0">
+          
+          {/* BANNIÈRE PROFIL */}
+          <div className="flex items-center gap-6 animate-in fade-in duration-700">
+            <div className="relative w-32 h-32 rounded-full bg-[#121314] border-4 border-[#121314] overflow-hidden shadow-2xl flex-shrink-0">
+              <Image 
+                src={`https://www.roblox.com/headshot-thumbnail/image?userId=${USER_ID}&width=150&height=150&format=png`}
+                alt="Profile Avatar"
+                fill 
+                unoptimized
+                className="object-cover"
+              />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-4xl font-black tracking-tight">Bonjour, Frost ! 👋</h1>
+              <p className="text-muted-foreground font-medium mt-1">
+                @awafrost • <span className="text-green-500 font-bold">En ligne</span>
+              </p>
+            </div>
+          </div>
+
+          {/* AMIS (avec vraies données) */}
+          <section>
+            <div className="flex justify-between items-end mb-4">
+              <h2 className="text-xl font-bold">Amis</h2>
+              <a 
+                href={`https://www.roblox.com/users/${USER_ID}/friends`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-xs font-bold text-gray-500 hover:text-white transition-colors"
+              >
+                Afficher tout
+              </a>
+            </div>
+            <RobloxFriends userId={USER_ID} />
+          </section>
+
         </div>
 
-        {/* Section Profil Principal */}
-        <div className='grid grid-cols-12 gap-6'>
-          {/* Carte Profil - Colonne de gauche */}
-          <FadeUpDiv className='col-span-12 lg:col-span-4'>
-            <div className='rounded-xl border bg-card p-6 space-y-6 h-full'>
-              {/* Avatar avec fond */}
-              <div className='flex justify-center'>
-                <RobloxAvatar3D 
-                  userId={ROBLOX_USER_ID} 
-                  width={180} 
-                  height={180} 
-                  className='w-44 h-44 lg:w-56 lg:h-56'
-                  onAvatarClick={() => setIsProfileModalOpen(true)}
-                />
-              </div>
-
-              {/* Nom et username */}
-              <div className='text-center space-y-1'>
-                <h1 className='text-3xl lg:text-4xl font-black'>Frost</h1>
-                <p className='text-sm text-muted-foreground'>@awafrost</p>
-              </div>
-
-              {/* Réseaux sociaux */}
-              <div className='flex gap-3 justify-center'>
-                <a
-                  href='https://www.youtube.com/@awafrost'
-                  target='_blank'
-                  rel='noreferrer'
-                  className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
-                  title='YouTube'
-                >
-                  <FaYoutube className='text-white' size={20} />
-                </a>
-                <a
-                  href='https://twitter.com/awafrost'
-                  target='_blank'
-                  rel='noreferrer'
-                  className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
-                  title='Twitter'
-                >
-                  <FaTwitter className='text-white' size={20} />
-                </a>
-                <a
-                  href='https://www.roblox.com/users/1743461749/profile'
-                  target='_blank'
-                  rel='noreferrer'
-                  className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
-                  title='Roblox'
-                >
-                  <Image width={20} height={20} src='/icons/roblox-logo.svg' alt='Roblox' />
-                </a>
-                <a
-                  href='https://discord.gg/WgBTgHyjag'
-                  target='_blank'
-                  rel='noreferrer'
-                  className='p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors'
-                  title='Discord'
-                >
-                  <FaDiscord className='text-white' size={20} />
-                </a>
-              </div>
-            </div>
-          </FadeUpDiv>
-
-          {/* Contenu principal - Colonne de droite */}
-          <FadeUpDiv className='col-span-12 lg:col-span-8 space-y-6'>
-            {/* Profil Roblox avec bio et stats */}
-            <RobloxProfile userId={ROBLOX_USER_ID} />
-
-            {/* Groupe */}
-            <div className='space-y-3'>
-              <h2 className='text-lg font-semibold'>Mon Groupe</h2>
-              <GroupCard groupId={GROUP_ID} />
-            </div>
-          </FadeUpDiv>
+        {/* COLONNE DROITE (Groupes Sidebar) */}
+        <div className="hidden xl:block w-80 h-[calc(100vh-100px)] sticky top-16 z-10 flex-shrink-0">
+          <div className="bg-[#191B1D] rounded-xl border border-[#232527] p-4 h-full overflow-y-auto">
+            <h3 className="text-lg font-bold mb-4">Mes Groupes</h3>
+            <UserGroups userId={USER_ID} />
+          </div>
         </div>
-
-        {/* Jeux Favoris - Full width */}
-        <FadeUpDiv className='col-span-12'>
-          <FavoritesGames gameIds={FAVORITE_GAMES} />
-        </FadeUpDiv>
-
-        {/* Section Affiliation */}
-        <FadeUpDiv className='col-span-12'>
-          <AffiliationSection />
-        </FadeUpDiv>
-      </FadeUpStagger>
-
-      {/* Modal Profil */}
-      <ProfileModal 
-        userId={ROBLOX_USER_ID}
-        isOpen={isProfileModalOpen}
-        onClose={() => setIsProfileModalOpen(false)}
-      />
-    </main>
+      </div>
+    </RobloxLayout>
   );
 }
