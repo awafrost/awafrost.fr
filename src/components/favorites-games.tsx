@@ -38,11 +38,7 @@ export function FavoritesGames({ gameIds }: FavoritesGamesProps) {
     const fetchGames = async () => {
       try {
         const res = await fetch(`/api/roblox/games?gameIds=${gameIds.join(',')}`);
-        if (!res.ok) {
-          const errorData = await res.json();
-          console.error('FavoritesGames API Error:', errorData);
-          throw new Error(`Failed to fetch games: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`Failed to fetch games: ${res.status}`);
         const data = await res.json();
         setGames(data.games || []);
       } catch (err) {
@@ -60,121 +56,105 @@ export function FavoritesGames({ gameIds }: FavoritesGamesProps) {
     }
   }, [gameIds, isMounted]);
 
+  // Squelette de chargement (Skeleton) minimaliste
   if (!isMounted || loading) {
     return (
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">Mes Jeux Favoris</h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="rounded-xl border bg-card overflow-hidden animate-pulse">
-              <div className="w-full h-40 bg-muted" />
-              <div className="p-4 space-y-3">
-                <div className="h-4 bg-muted rounded w-32" />
-                <div className="h-4 bg-muted rounded w-24" />
-              </div>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="rounded-2xl border border-white/5 bg-[#0a0a0a] overflow-hidden animate-pulse">
+            <div className="w-full h-44 bg-white/5" />
+            <div className="p-5 space-y-3">
+              <div className="h-3 bg-white/5 rounded w-3/4" />
+              <div className="h-3 bg-white/5 rounded w-1/2" />
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     );
   }
 
-  if (!gameIds || gameIds.length === 0) {
-    return null;
-  }
+  if (!gameIds || gameIds.length === 0) return null;
 
   if (games.length === 0) {
     return (
-      <div className="space-y-4 rounded-xl border bg-card p-6">
-        <h2 className="text-2xl font-bold">Mes Jeux Favoris</h2>
-        <p className="text-muted-foreground">
-          Les jeux favoris n&apos;ont pas pu être chargés. Vérifiez que les IDs sont corrects.
+      <div className="rounded-2xl border border-white/10 bg-[#0a0a0a] p-12 text-center">
+        <p className="text-gray-500 font-mono text-xs uppercase tracking-widest">
+          Aucune donnée disponible
         </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Mes Jeux Favoris</h2>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {games.map((game, index) => (
-          <motion.a
-            key={game.placeId}
-            href={`https://www.roblox.com/games/${game.placeId}`}
-            target='_self'
-            rel='noreferrer'
-            className="group rounded-xl border bg-card overflow-hidden transition-all hover:border-primary hover:shadow-lg"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            {/* Image du jeu */}
-            <div className="relative w-full h-40 bg-muted/50 overflow-hidden">
-              {game.imageUrl ? (
-                <Image
-                  src={game.imageUrl}
-                  alt={game.name}
-                  width={480}
-                  height={270}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                  unoptimized
-                />
-              ) : game.imageToken ? (
-                <Image
-                  src={`https://www.roblox.com/game-media?assetId=${game.imageToken}&width=480&height=270&format=png`}
-                  alt={game.name}
-                  width={480}
-                  height={270}
-                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                  unoptimized
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                  No image
-                </div>
-              )}
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {games.map((game, index) => (
+        <motion.a
+          key={game.placeId}
+          href={`https://www.roblox.com/games/${game.placeId}`}
+          target='_blank'
+          rel='noreferrer'
+          className="group relative rounded-2xl border border-white/5 bg-[#0a0a0a] overflow-hidden transition-all duration-500 hover:border-white/20"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.05 }}
+        >
+          {/* Image du jeu avec overlay progressif */}
+          <div className="relative w-full h-44 overflow-hidden border-b border-white/5">
+            {game.imageUrl || game.imageToken ? (
+              <Image
+                src={game.imageUrl || `https://www.roblox.com/game-media?assetId=${game.imageToken}&width=480&height=270&format=png`}
+                alt={game.name}
+                width={480}
+                height={270}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                unoptimized
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-[#111] text-[10px] uppercase tracking-widest text-gray-600">
+                No Preview
+              </div>
+            )}
+            {/* Overlay noir subtil au survol */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+               <span className="text-[10px] font-bold uppercase tracking-[0.2em] border border-white/20 px-4 py-2 bg-black/60 backdrop-blur-sm">
+                 Lancer le jeu
+               </span>
             </div>
+          </div>
 
-            {/* Contenu */}
-            <div className="p-4 space-y-3">
-              <h3 className="font-semibold line-clamp-2 group-hover:text-primary transition-colors">
-                {game.name}
-              </h3>
+          {/* Contenu textuel */}
+          <div className="p-6 space-y-4">
+            <h3 className="font-bold text-sm tracking-tight text-gray-200 line-clamp-1 group-hover:text-white transition-colors">
+              {game.name}
+            </h3>
 
-              {/* Stats */}
-              {game.stats && (
-                <div className="space-y-2 text-sm">
-                  {game.stats.playing !== undefined && (
-                    <div className="flex items-center justify-between text-muted-foreground">
-                      <span className="flex items-center gap-2">
-                        <FaUsers className="w-4 h-4" />
-                        En jeu
-                      </span>
-                      <span className="font-semibold text-foreground">{game.stats.playing.toLocaleString()}</span>
-                    </div>
-                  )}
-                  {game.stats.visits !== undefined && (
-                    <div className="flex items-center justify-between text-muted-foreground">
-                      <span className="flex items-center gap-2">
-                        <FaEye className="w-4 h-4" />
-                        Visites
-                      </span>
-                      <span className="font-semibold text-foreground">{game.stats.visits.toLocaleString()}</span>
-                    </div>
-                  )}
+            {/* Statistiques épurées */}
+            {game.stats && (
+              <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <FaUsers size={10} className="text-white/40" />
+                    <span className="text-[9px] uppercase font-bold tracking-widest">En jeu</span>
+                  </div>
+                  <p className="text-xs font-mono text-white">
+                    {game.stats.playing?.toLocaleString() ?? '0'}
+                  </p>
                 </div>
-              )}
-            </div>
-          </motion.a>
-        ))}
-      </div>
+                
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <FaEye size={10} className="text-white/40" />
+                    <span className="text-[9px] uppercase font-bold tracking-widest">Visites</span>
+                  </div>
+                  <p className="text-xs font-mono text-white">
+                    {game.stats.visits?.toLocaleString() ?? '0'}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </motion.a>
+      ))}
     </div>
   );
 }

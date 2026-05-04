@@ -9,33 +9,29 @@ interface RobloxAvatar3DProps {
   className?: string;
   width?: number;
   height?: number;
-  size?: 'sm' | 'md' | 'lg';
   onAvatarClick?: () => void;
 }
 
-export function RobloxAvatar3D({ userId, className = '', width = 150, height = 150, onAvatarClick }: RobloxAvatar3DProps) {
+export function RobloxAvatar3D({ userId, className = '', width = 400, height = 400, onAvatarClick }: RobloxAvatar3DProps) {
   const [avatarUrl, setAvatarUrl] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAvatar = async () => {
       try {
-        const response = await fetch(
-          `/api/roblox/avatar?userId=${userId}`
-        );
+        const response = await fetch(`/api/roblox/avatar?userId=${userId}`);
         if (response.ok) {
           const data = await response.json();
-          if (data.data && Array.isArray(data.data) && data.data[0]?.imageUrl) {
+          if (data.data?.[0]?.imageUrl) {
             setAvatarUrl(data.data[0].imageUrl);
           }
         }
       } catch (error) {
-        console.error('Erreur lors du chargement de l\'avatar:', error);
+        console.error('Erreur avatar:', error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchAvatar();
   }, [userId]);
 
@@ -43,76 +39,70 @@ export function RobloxAvatar3D({ userId, className = '', width = 150, height = 1
     <motion.button
       onClick={onAvatarClick}
       type="button"
-      className={`relative w-44 h-44 lg:w-56 lg:h-56 overflow-visible rounded-full cursor-pointer focus:outline-none ${className}`}
-      animate={{
-        y: [0, -10, 0],
-      }}
-      transition={{
-        duration: 3,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
-      whileHover={{ scale: 1.05 }}
+      className={`relative w-56 h-56 lg:w-72 lg:h-72 flex items-center justify-center group outline-none ${className}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
     >
-      {/* Contour blanc en pointillé qui tourne */}
+      {/* ANNEAUX DÉCORATIFS EXTERNES */}
       <motion.div 
-        className='absolute -inset-3 rounded-full border-4 border-dashed border-white shadow-lg shadow-white/30 z-50'
-        animate={{
-          rotate: 360,
-          boxShadow: [
-            '0 0 10px rgba(255, 255, 255, 0.3)',
-            '0 0 20px rgba(255, 255, 255, 0.8)',
-            '0 0 10px rgba(255, 255, 255, 0.3)',
-          ],
-        }}
-        transition={{
-          rotate: {
-            duration: 6,
-            repeat: Infinity,
-            ease: 'linear',
-          },
-          boxShadow: {
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          },
-        }}
+        className="absolute inset-0 rounded-full border border-dashed border-white/5"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       />
 
-      {/* Container principal avec rounded et shadow */}
-      <div className='absolute inset-0 rounded-full overflow-hidden shadow-2xl'>
-        {/* Fond avec gradient noir et blanc - positionné derrière */}
-        <div className='absolute inset-0 z-0'>
-          <div className='absolute inset-0 bg-gradient-to-br from-slate-900 via-gray-800 to-black opacity-50 blur-2xl' />
-          <div className='absolute inset-0 bg-gradient-to-tr from-slate-600/20 via-transparent to-slate-300/20' />
-        </div>
+      {/* LE HUBLOT (Container principal) */}
+      <div className="absolute inset-4 rounded-full bg-black border-[6px] border-[#1a1a1a] overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.8)] z-10">
         
-        {/* Avatar - positionné au-dessus */}
-        <div className='relative z-10 w-full h-full'>
+        {/* FOND INTERNE (Derrière l'avatar) */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_#222_0%,_#000_100%)] z-0" />
+
+        {/* L'AVATAR (À l'intérieur du hublot) */}
+        <motion.div 
+          className="relative z-10 w-full h-full flex items-center justify-center"
+          animate={{
+            y: [2, -6, 2],
+            rotate: [-1, 1, -1]
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
           {loading ? (
-            <div className='w-full h-full bg-gradient-to-br from-muted to-muted/50 animate-pulse flex items-center justify-center'>
-              <span className='text-xs text-muted-foreground'>Chargement...</span>
-            </div>
+            <div className="w-6 h-6 border-2 border-white/10 border-t-white rounded-full animate-spin" />
           ) : avatarUrl ? (
             <Image
               src={avatarUrl}
-              alt="Avatar Roblox"
+              alt="Avatar"
               width={width}
               height={height}
-              className='w-full h-full pointer-events-none object-cover'
+              className="w-[110%] h-[110%] object-contain"
               unoptimized
             />
-          ) : (
-            <div className='w-full h-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-muted-foreground'>
-              Pas d&apos;avatar
-            </div>
-          )}
+          ) : null}
+        </motion.div>
+
+        {/* VITRE ET REFLETS (Par-dessus l'avatar, à l'intérieur du cercle) */}
+        <div className="absolute inset-0 z-20 pointer-events-none">
+          {/* Reflet diagonal type "verre" */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.05] to-white/[0.1]" />
+          
+          {/* Ombre interne pour donner de la profondeur au cadre */}
+          <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.9)]" />
+          
+          {/* Brillance circulaire supérieure */}
+          <div className="absolute -top-1/2 -left-1/4 w-full h-full bg-white/[0.03] rounded-full blur-3xl" />
         </div>
-        
-        {/* Overlay de brillance supérieure */}
-        <div className='absolute inset-0 z-20 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/20 pointer-events-none' />
       </div>
+
+      {/* CADRE MÉTALLIQUE EXTÉRIEUR (Optionnel, pour le relief) */}
+      <div className="absolute inset-4 rounded-full border border-white/10 z-30 pointer-events-none" />
+
+      {/* OMBRE AU SOL */}
+      <div className="absolute -bottom-6 w-1/3 h-2 bg-black/60 blur-lg rounded-full" />
     </motion.button>
   );
 }
