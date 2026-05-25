@@ -34,6 +34,53 @@ export default function Home() {
           <ThemeToggle />
         </nav>
 
+        {/* Floating Card - Murder Mystery 2 */}
+        <div className='fixed bottom-8 right-8 z-40 hidden lg:block'>
+          <a
+            href='https://www.roblox.com/games/606849621'
+            target='_blank'
+            rel='noreferrer'
+            className='block group'
+          >
+            <div className='relative'>
+              {/* Glow effect */}
+              <div className='absolute -inset-1 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 opacity-0 group-hover:opacity-100 blur transition-opacity duration-300'></div>
+              {/* Card */}
+              <div className='relative rounded-2xl border border-white/10 bg-gradient-to-br from-[#1a0a2e] to-[#0a0a0a] p-6 backdrop-blur-sm w-72 transform transition-all duration-300 group-hover:scale-105'>
+                <div className='absolute top-0 right-0 w-20 h-20 bg-purple-500/20 rounded-full blur-3xl -z-10'></div>
+                
+                <div className='space-y-3'>
+                  {/* Header */}
+                  <div className='flex items-start justify-between'>
+                    <div>
+                      <h3 className='text-lg font-bold text-white'>Murder Mystery 2</h3>
+                      <p className='text-[10px] text-purple-400 font-mono tracking-wider uppercase'>Private Server</p>
+                    </div>
+                    <div className='w-10 h-10 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center'>
+                      <span className='text-lg'>🔒</span>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <p className='text-xs text-gray-400 leading-relaxed'>
+                    Rejoins mon serveur privé exclusif et profite d&apos;une expérience unique avec la communauté.
+                  </p>
+
+                  {/* Button */}
+                  <div className='pt-2'>
+                    <div className='px-4 py-2 rounded-lg bg-purple-600 text-white text-xs font-bold text-center group-hover:bg-purple-500 transition-colors'>
+                      Réclamer l&apos;accès
+                    </div>
+                  </div>
+                </div>
+
+                {/* Decorative border animation */}
+                <div className='absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500 to-pink-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300'></div>
+              </div>
+            </div>
+          </a>
+        </div>
+
         <div className='container mx-auto px-6 py-28 lg:py-40 max-w-6xl'>
           
           {/* Header - Typographie Blanc vers Gris */}
