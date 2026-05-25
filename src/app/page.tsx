@@ -156,8 +156,8 @@ export default function Home() {
         <div className='container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4'>
           <p className='text-[10px] text-gray-600 font-mono tracking-widest uppercase'>© 2026 Awaji Frost</p>
           <div className='flex gap-8 text-[10px] text-gray-500 font-mono uppercase tracking-widest'>
-            <span className='hover:text-white cursor-pointer transition-colors'>Protection des données</span>
-            <span className='hover:text-white cursor-pointer transition-colors'>ToS</span>
+            <a href='/confidentialite' className='hover:text-white transition-colors'>Protection des données</a>
+            <a href='/conditions' className='hover:text-white transition-colors'>ToS</a>
           </div>
         </div>
       </footer>
