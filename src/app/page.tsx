@@ -6,6 +6,7 @@ import { RobloxAvatar3D } from '@/components/roblox-avatar-3d';
 import { FavoritesGames } from '@/components/favorites-games';
 import { GroupCard } from '@/components/group-card';
 import { RobloxProfile } from '@/components/roblox-profile';
+import { RobloxStatus } from '@/components/roblox-status';
 import { ProfileModal } from '@/components/profile-modal';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -37,7 +38,7 @@ export default function Home() {
         {/* Floating Card - Murder Mystery 2 */}
         <div className='fixed bottom-8 right-8 z-40 hidden lg:block'>
           <a
-            href='https://www.roblox.com/games/606849621'
+            href='https://www.roblox.com/share?code=530926b7bb91d44581c31a7f390b2f69&type=Server'
             target='_blank'
             rel='noreferrer'
             className='block group'
@@ -54,7 +55,7 @@ export default function Home() {
                   <div className='flex items-start justify-between'>
                     <div>
                       <h3 className='text-lg font-bold text-white'>Murder Mystery 2</h3>
-                      <p className='text-[10px] text-purple-400 font-mono tracking-wider uppercase'>Private Server</p>
+                      <p className='text-[10px] text-purple-400 font-mono tracking-wider uppercase'>Serveur privé</p>
                     </div>
                     <div className='w-10 h-10 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-center'>
                       <span className='text-lg'>🔒</span>
@@ -163,10 +164,22 @@ export default function Home() {
                 </FadeUpDiv>
               </div>
 
-              {/* Section 02 : Organisations */}
+              {/* Section 02 : Statut En Direct */}
               <div className='space-y-8'>
                 <div className='flex items-center gap-4'>
                   <span className='font-mono text-xs text-gray-600'>02</span>
+                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Présence En Direct</h3>
+                  <div className='h-px flex-grow bg-white/5'></div>
+                </div>
+                <FadeUpDiv className='rounded-3xl border border-white/10 bg-[#0a0a0a] p-8 shadow-2xl'>
+                  <RobloxStatus userId={ROBLOX_USER_ID} />
+                </FadeUpDiv>
+              </div>
+
+              {/* Section 03 : Organisations */}
+              <div className='space-y-8'>
+                <div className='flex items-center gap-4'>
+                  <span className='font-mono text-xs text-gray-600'>03</span>
                   <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Groupes & Studios</h3>
                   <div className='h-px flex-grow bg-white/5'></div>
                 </div>
@@ -175,10 +188,10 @@ export default function Home() {
                 </FadeUpDiv>
               </div>
 
-              {/* Section 03 : Expériences */}
+              {/* Section 04 : Expériences */}
               <div className='space-y-8'>
                 <div className='flex items-center gap-4'>
-                  <span className='font-mono text-xs text-gray-600'>03</span>
+                  <span className='font-mono text-xs text-gray-600'>04</span>
                   <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Jeux Favoris</h3>
                   <div className='h-px flex-grow bg-white/5'></div>
                 </div>
