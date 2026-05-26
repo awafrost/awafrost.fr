@@ -154,7 +154,7 @@ export function RobloxStatus({ userId }: RobloxStatusProps) {
       {/* Infos Additionnelles */}
       <div className="pt-4 border-t border-white/5 space-y-3">
         <div className="flex items-center justify-between">
-          <p className="text-[10px] text-gray-500 uppercase font-bold tracking-[0.2em]">Premium Roblox</p>
+          <p className="text-[10px] text-gray-500 uppercase font-bold tracking-[0.2em]">Roblox Plus</p>
           <div className={`px-2 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${
             statusData.isPremium 
               ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' 
