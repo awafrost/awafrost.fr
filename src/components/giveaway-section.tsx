@@ -10,6 +10,8 @@ type Giveaway = {
   imageUrl: string;
   endsAt: string;
   participantCount: number;
+  winner: string | null;
+  winnerAnnouncedAt: string | null;
 };
 
 export function GiveawaySection() {
@@ -80,11 +82,22 @@ export function GiveawaySection() {
               <p className='mt-3 font-mono text-xs text-white'>Temps restant : {formatRemaining(giveaway.endsAt)}</p>
             </div>
           </div>
-          <form onSubmit={(event) => participate(event, giveaway.id)} className='mt-6 flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row'>
-            <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder='Ton pseudo Roblox' maxLength={20} className='min-w-0 flex-1 rounded-xl border border-white/10 bg-black px-4 py-3 text-sm text-white outline-none placeholder:text-gray-600 focus:border-white/40' />
-            <button type='submit' className='rounded-xl bg-white px-5 py-3 text-xs font-bold uppercase tracking-wider text-black transition hover:bg-gray-200'>Participer</button>
-          </form>
-          <p className='mt-3 text-[10px] uppercase tracking-wider text-gray-600'>{giveaway.participantCount} participant(s)</p>
+          {giveaway.winnerAnnouncedAt ? (
+            <div className='mt-6 border-t border-white/10 pt-5'>
+              <p className='text-[10px] font-mono uppercase tracking-[0.25em] text-gray-500'>Résultat du giveaway</p>
+              <p className='mt-2 text-lg font-bold text-white'>
+                {giveaway.winner ? `Félicitations à ${giveaway.winner} !` : 'Aucun participant cette fois-ci.'}
+              </p>
+            </div>
+          ) : (
+            <>
+              <form onSubmit={(event) => participate(event, giveaway.id)} className='mt-6 flex flex-col gap-3 border-t border-white/10 pt-5 sm:flex-row'>
+                <input value={username} onChange={(event) => setUsername(event.target.value)} placeholder='Ton pseudo Roblox' maxLength={20} className='min-w-0 flex-1 rounded-xl border border-white/10 bg-black px-4 py-3 text-sm text-white outline-none placeholder:text-gray-600 focus:border-white/40' />
+                <button type='submit' className='rounded-xl bg-white px-5 py-3 text-xs font-bold uppercase tracking-wider text-black transition hover:bg-gray-200'>Participer</button>
+              </form>
+              <p className='mt-3 text-[10px] uppercase tracking-wider text-gray-600'>{giveaway.participantCount} participant(s)</p>
+            </>
+          )}
         </article>
       ))}
       {message && <p className='text-sm text-gray-300'>{message}</p>}

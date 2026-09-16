@@ -3,8 +3,8 @@ import { adminCookieName, createAdminToken, isAdminCredentials } from '@/lib/adm
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
-  const username = typeof body?.username === 'string' ? body.username : '';
-  const password = typeof body?.password === 'string' ? body.password : '';
+  const username = typeof body?.username === 'string' ? body.username.trim().slice(0, 64) : '';
+  const password = typeof body?.password === 'string' ? body.password.slice(0, 128) : '';
 
   if (!isAdminCredentials(username, password)) {
     return Response.json({ error: 'Identifiants invalides.' }, { status: 401 });

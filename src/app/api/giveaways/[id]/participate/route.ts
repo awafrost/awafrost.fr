@@ -2,6 +2,10 @@ import { NextRequest } from 'next/server';
 import { readGiveaways, updateGiveaways } from '@/lib/giveaways';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(params.id)) {
+    return Response.json({ error: 'Giveaway introuvable.' }, { status: 404 });
+  }
+
   const body = await request.json().catch(() => null);
   const username = typeof body?.username === 'string' ? body.username.trim() : '';
 

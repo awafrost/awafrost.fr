@@ -17,6 +17,8 @@ export type Giveaway = {
   endsAt: string;
   createdAt: string;
   participants: GiveawayParticipant[];
+  winner: string | null;
+  winnerAnnouncedAt: string | null;
 };
 
 const dataPath = path.join(process.cwd(), 'data', 'giveaways.json');
@@ -49,9 +51,13 @@ async function ensureTable() {
       image_url TEXT NOT NULL DEFAULT '',
       ends_at TIMESTAMPTZ NOT NULL,
       created_at TIMESTAMPTZ NOT NULL,
-      participants JSONB NOT NULL DEFAULT '[]'::jsonb
+      participants JSONB NOT NULL DEFAULT '[]'::jsonb,
+      winner TEXT,
+      winner_announced_at TIMESTAMPTZ
     )
   `;
+  await sql`ALTER TABLE giveaways ADD COLUMN IF NOT EXISTS winner TEXT`;
+  await sql`ALTER TABLE giveaways ADD COLUMN IF NOT EXISTS winner_announced_at TIMESTAMPTZ`;
 }
 
 export async function readGiveaways(): Promise<Giveaway[]> {
@@ -60,7 +66,7 @@ export async function readGiveaways(): Promise<Giveaway[]> {
     return JSON.parse(await fs.readFile(dataPath, 'utf8')) as Giveaway[];
   }
   await ensureTable();
-  const { rows } = await sql`SELECT id, title, description, prize, image_url, ends_at, created_at, participants FROM giveaways ORDER BY created_at DESC`;
+  const { rows } = await sql`SELECT id, title, description, prize, image_url, ends_at, created_at, participants, winner, winner_announced_at FROM giveaways ORDER BY created_at DESC`;
   return rows.map((row) => ({
     id: row.id as string,
     title: row.title as string,
@@ -70,6 +76,8 @@ export async function readGiveaways(): Promise<Giveaway[]> {
     endsAt: new Date(row.ends_at as string).toISOString(),
     createdAt: new Date(row.created_at as string).toISOString(),
     participants: row.participants as GiveawayParticipant[],
+    winner: (row.winner as string | null) || null,
+    winnerAnnouncedAt: row.winner_announced_at ? new Date(row.winner_announced_at as string).toISOString() : null,
   }));
 }
 
@@ -82,8 +90,8 @@ export async function insertGiveaway(giveaway: Giveaway) {
   }
   await ensureTable();
   await sql`
-    INSERT INTO giveaways (id, title, description, prize, image_url, ends_at, created_at, participants)
-    VALUES (${giveaway.id}, ${giveaway.title}, ${giveaway.description}, ${giveaway.prize}, ${giveaway.imageUrl}, ${giveaway.endsAt}, ${giveaway.createdAt}, ${JSON.stringify(giveaway.participants)})
+    INSERT INTO giveaways (id, title, description, prize, image_url, ends_at, created_at, participants, winner, winner_announced_at)
+    VALUES (${giveaway.id}, ${giveaway.title}, ${giveaway.description}, ${giveaway.prize}, ${giveaway.imageUrl}, ${giveaway.endsAt}, ${giveaway.createdAt}, ${JSON.stringify(giveaway.participants)}, ${giveaway.winner}, ${giveaway.winnerAnnouncedAt})
   `;
 }
 
@@ -96,9 +104,36 @@ export async function updateGiveaways(giveaways: Giveaway[]) {
   await ensureTable();
   for (const giveaway of giveaways) {
     await sql`
-      UPDATE giveaways SET participants = ${JSON.stringify(giveaway.participants)} WHERE id = ${giveaway.id}
+      UPDATE giveaways SET participants = ${JSON.stringify(giveaway.participants)}, winner = ${giveaway.winner}, winner_announced_at = ${giveaway.winnerAnnouncedAt} WHERE id = ${giveaway.id}
     `;
   }
+}
+
+export async function updateGiveaway(giveaway: Giveaway) {
+  if (!hasPostgres) {
+    const giveaways = await readGiveaways();
+    const index = giveaways.findIndex((item) => item.id === giveaway.id);
+    if (index >= 0) giveaways[index] = giveaway;
+    await fs.writeFile(dataPath, JSON.stringify(giveaways, null, 2), 'utf8');
+    return;
+  }
+
+  await ensureTable();
+  await sql`
+    UPDATE giveaways
+    SET title = ${giveaway.title}, description = ${giveaway.description}, prize = ${giveaway.prize}, image_url = ${giveaway.imageUrl}, ends_at = ${giveaway.endsAt}, participants = ${JSON.stringify(giveaway.participants)}, winner = ${giveaway.winner}, winner_announced_at = ${giveaway.winnerAnnouncedAt}
+    WHERE id = ${giveaway.id}
+  `;
+}
+
+export function drawWinner(giveaway: Giveaway, reroll = false) {
+  if (!reroll && giveaway.winnerAnnouncedAt) return false;
+
+  giveaway.winner = giveaway.participants.length > 0
+    ? giveaway.participants[Math.floor(Math.random() * giveaway.participants.length)].username
+    : null;
+  giveaway.winnerAnnouncedAt = new Date().toISOString();
+  return true;
 }
 
 export function createGiveaway(input: Pick<Giveaway, 'title' | 'description' | 'prize' | 'imageUrl' | 'endsAt'>): Giveaway {
@@ -107,5 +142,7 @@ export function createGiveaway(input: Pick<Giveaway, 'title' | 'description' | '
     id: randomUUID(),
     createdAt: new Date().toISOString(),
     participants: [],
+    winner: null,
+    winnerAnnouncedAt: null,
   };
 }
