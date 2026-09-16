@@ -8,6 +8,8 @@ import { GroupCard } from '@/components/group-card';
 import { RobloxProfile } from '@/components/roblox-profile';
 import { RobloxStatus } from '@/components/roblox-status';
 import { ProfileModal } from '@/components/profile-modal';
+import { GiveawaySection } from '@/components/giveaway-section';
+import { WelcomeMessage } from '@/components/welcome-message';
 import Image from 'next/image';
 import { useState } from 'react';
 import {
@@ -19,21 +21,8 @@ import {
 export default function Home() {
   const ROBLOX_USER_ID = '1743461749';
   const FAVORITE_GAMES = [286090429, 606849621, 142823291];
-  const GROUP_ID = 13212005;
+  const GROUP_ID = 677727451;
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [isAgeVerified, setIsAgeVerified] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('ageVerified13+') === 'true';
-    }
-    return false;
-  });
-
-  const handleAgeVerification = () => {
-    setIsAgeVerified(true);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('ageVerified13+', 'true');
-    }
-  };
 
   return (
     <main className='min-h-screen bg-[#000000] text-white selection:bg-white selection:text-black font-sans'>
@@ -91,39 +80,25 @@ export default function Home() {
                     </div>
 
                     {/* Réseaux Sociaux - Style Bouton Industriel */}
-                    {isAgeVerified ? (
-                      <div className='grid grid-cols-2 gap-3'>
-                        {[
-                          { icon: <FaYoutube size={16} />, link: 'https://www.youtube.com/@awafrost', label: 'Youtube' },
-                          { icon: <FaTwitter size={16} />, link: 'https://twitter.com/awafrost', label: 'Twitter' },
-                          { icon: <FaDiscord size={16} />, link: 'https://discord.gg/WgBTgHyjag', label: 'Discord' },
-                          { icon: <Image width={16} height={16} src='/icons/roblox-logo.svg' alt='R' className='invert' />, link: 'https://www.roblox.com/users/1743461749/profile', label: 'Roblox' }
-                        ].map((social, index) => (
-                          <a
-                            key={index}
-                            href={social.link}
-                            target='_blank'
-                            rel='noreferrer'
-                            className='flex items-center gap-3 p-3 rounded-xl bg-[#111111] border border-white/5 hover:border-white/20 hover:bg-[#1a1a1a] transition-all duration-300'
-                          >
-                            <span className='text-gray-400 group-hover:text-white'>{social.icon}</span>
-                            <span className='text-[10px] uppercase font-bold tracking-wider text-gray-500'>{social.label}</span>
-                          </a>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className='space-y-3'>
-                        <p className='text-[10px] text-gray-500 text-center uppercase font-mono tracking-widest'>
-                          Les réseaux sociaux sont protégés
-                        </p>
-                        <button
-                          onClick={handleAgeVerification}
-                          className='w-full px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold uppercase tracking-wider hover:from-purple-500 hover:to-pink-500 transition-all duration-300 transform hover:scale-105'
+                    <div className='grid grid-cols-2 gap-3'>
+                      {[
+                        { icon: <FaYoutube size={16} />, link: 'https://www.youtube.com/@awafrost', label: 'Youtube' },
+                        { icon: <FaTwitter size={16} />, link: 'https://twitter.com/awafrost', label: 'Twitter' },
+                        { icon: <FaDiscord size={16} />, link: 'https://discord.gg/WgBTgHyjag', label: 'Discord' },
+                        { icon: <Image width={16} height={16} src='/icons/roblox-logo.svg' alt='R' className='invert' />, link: 'https://www.roblox.com/users/1743461749/profile', label: 'Roblox' }
+                      ].map((social, index) => (
+                        <a
+                          key={index}
+                          href={social.link}
+                          target='_blank'
+                          rel='noreferrer'
+                          className='flex items-center gap-3 p-3 rounded-xl bg-[#111111] border border-white/5 hover:border-white/20 hover:bg-[#1a1a1a] transition-all duration-300'
                         >
-                          ✓ J&apos;ai 13 ans ou plus
-                        </button>
-                      </div>
-                    )}
+                          <span className='text-gray-400 group-hover:text-white'>{social.icon}</span>
+                          <span className='text-[10px] uppercase font-bold tracking-wider text-gray-500'>{social.label}</span>
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </FadeUpDiv>
@@ -141,6 +116,18 @@ export default function Home() {
                 </div>
                 <FadeUpDiv className='rounded-3xl border border-white/10 bg-[#0a0a0a] p-8 shadow-2xl'>
                   <RobloxProfile userId={ROBLOX_USER_ID} />
+                </FadeUpDiv>
+              </div>
+
+              {/* Section 05 : Giveaways */}
+              <div className='space-y-8'>
+                <div className='flex items-center gap-4'>
+                  <span className='font-mono text-xs text-gray-600'>05</span>
+                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Giveaways</h3>
+                  <div className='h-px flex-grow bg-white/5'></div>
+                </div>
+                <FadeUpDiv className='rounded-3xl border border-white/10 bg-[#0a0a0a] p-8'>
+                  <GiveawaySection />
                 </FadeUpDiv>
               </div>
 
@@ -190,6 +177,8 @@ export default function Home() {
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
       />
+
+      <WelcomeMessage />
 
       {/* Footer */}
       <footer className='py-20 border-t border-white/5'>

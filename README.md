@@ -58,7 +58,7 @@ PORT=3000
 // Changez ces IDs pour personnaliser votre profil
 const ROBLOX_USER_ID = '1743461749';
 const FAVORITE_GAMES = [286090429, 606849621, 142823291];
-const GROUP_ID = 13212005;
+const GROUP_ID = 677727451;
 ```
 
 Et `src/config/site.ts` pour les métadonnées:
@@ -113,6 +113,16 @@ src/
 ## 🚀 Déploiement
 
 ### Vercel (Recommandé)
+
+Les giveaways utilisent Vercel Postgres. Après avoir créé une base depuis l’intégration Vercel, ajoutez automatiquement ses variables d’environnement au projet, puis configurez aussi :
+
+```env
+ADMIN_USERNAME=awa
+ADMIN_PASSWORD=101010
+ADMIN_SESSION_SECRET=une-valeur-secrete-longue
+```
+
+La page d’administration est disponible sur `/admin/giveaways`. Les images des giveaways sont fournies via une URL HTTPS.
 
 ```bash
 # 1. Push sur GitHub
