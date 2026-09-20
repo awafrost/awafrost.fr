@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
 import './globals.css';
 import Provider from './provider';
-import { Inter } from 'next/font/google';
+import { Space_Grotesk } from 'next/font/google';
 import { siteConfig } from '@/config/site';
 
-// Configuration de la police Inter
-const inter = Inter({
+const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
-  weight: ['400', '700'], // Poids régulier et bold pour limiter les requêtes
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -57,7 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Préconnexion à Google Fonts pour améliorer la fiabilité */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className={inter.className}>
+      <body className={spaceGrotesk.className}>
         <Provider>{children}</Provider> 
       </body>
     </html> 

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -38,16 +38,28 @@ const FadeUpDiv = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLAnch
 );
 FadeUpDiv.displayName = 'FadeUpDiv';
 
-const FadeUpCard = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLAnchorElement>>(
-  ({ className, children }, ref) => (
-    <motion.div
-      className={cn('rounded-xl border bg-card text-card-foreground shadow', className)}
-      variants={FADE_UP_ANIMATION_VARIANTS}
-    >
-      {children}
-    </motion.div>
-  ),
-);
-FadeUpCard.displayName = 'FadeUpDiv';
+function ScrollReveal({ children, className }: { children: React.ReactNode; className?: string }) {
+  const elementRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-export { FADE_UP_ANIMATION_VARIANTS, FadeUpStagger, FadeUpDiv, FadeUpCard };
+  useEffect(() => {
+    const element = elementRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.15, rootMargin: '-8% 0px -8% 0px' },
+    );
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={elementRef} className={cn('mobile-scroll-item', isVisible && 'mobile-scroll-item-visible', className)}>
+      {children}
+    </div>
+  );
+}
+
+export { FADE_UP_ANIMATION_VARIANTS, FadeUpStagger, FadeUpDiv, ScrollReveal };

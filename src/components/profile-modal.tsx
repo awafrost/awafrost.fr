@@ -71,12 +71,10 @@ export function ProfileModal({ userId, isOpen, onClose }: ProfileModalProps) {
             className="fixed inset-0 flex items-center justify-center z-[70] p-4 pointer-events-none"
           >
             <div 
-              className="rounded-3xl border border-white/10 bg-[#0a0a0a] p-8 shadow-[0_0_50px_rgba(0,0,0,0.5)] w-full max-w-md pointer-events-auto relative overflow-hidden"
+              className="w-full max-w-md bg-[#050505] p-8 pointer-events-auto relative overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Effet de grain de fond ou reflet discret */}
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-
               {/* Header */}
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-2">
@@ -120,7 +118,7 @@ export function ProfileModal({ userId, isOpen, onClose }: ProfileModalProps) {
                   <div className="grid grid-cols-1 gap-3">
                     
                     {/* Date de création */}
-                    <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="flex items-center justify-between py-4">
                       <div className="flex items-center gap-3">
                         <FaCalendar className="text-white/40" size={14} />
                         <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Sur Roblox depuis</span>
@@ -131,7 +129,7 @@ export function ProfileModal({ userId, isOpen, onClose }: ProfileModalProps) {
                     </div>
 
                     {/* Stats et Premium */}
-                    <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="flex items-center justify-between py-4">
                       <div className="flex items-center gap-3">
                         <FaUserFriends className="text-white/40" size={14} />
                         <span className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Abonnés</span>
@@ -140,7 +138,7 @@ export function ProfileModal({ userId, isOpen, onClose }: ProfileModalProps) {
                     </div>
 
                     {profile.premium.isPremium && (
-                      <div className="flex items-center justify-between p-4 rounded-2xl bg-white text-black">
+                      <div className="flex items-center justify-between py-4 text-white">
                         <div className="flex items-center gap-3">
                           <FaCrown size={14} />
                           <span className="text-[10px] font-black uppercase tracking-[0.2em]">Statut Premium</span>
@@ -151,7 +149,7 @@ export function ProfileModal({ userId, isOpen, onClose }: ProfileModalProps) {
                   </div>
 
                   {/* Footer Modal / ID */}
-                  <div className="pt-6 border-t border-white/5 flex justify-between items-center">
+                  <div className="pt-6 flex justify-between items-center">
                     <span className="text-[9px] font-mono text-gray-700 uppercase">Data ID: {profile.profile.id}</span>
                     <span className="text-[9px] font-mono text-gray-700 uppercase tracking-widest">Encrypted.v1</span>
                   </div>

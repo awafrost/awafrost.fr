@@ -1,54 +1,56 @@
 'use client';
 
-import { FadeUpDiv, FadeUpStagger } from '@/components/animation';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { FadeUpDiv, FadeUpStagger, ScrollReveal } from '@/components/animation';
 import { RobloxAvatar3D } from '@/components/roblox-avatar-3d';
-import { FavoritesGames } from '@/components/favorites-games';
-import { GroupCard } from '@/components/group-card';
 import { RobloxProfile } from '@/components/roblox-profile';
 import { RobloxStatus } from '@/components/roblox-status';
 import { ProfileModal } from '@/components/profile-modal';
-import { GiveawaySection } from '@/components/giveaway-section';
 import { WelcomeMessage } from '@/components/welcome-message';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   FaDiscord,
   FaTwitter,
   FaYoutube,
 } from 'react-icons/fa';
 
+function getDaysUntilBirthday() {
+  const today = new Date();
+  const birthday = new Date(today.getFullYear(), 7, 15);
+
+  if (birthday.getTime() < today.getTime()) {
+    birthday.setFullYear(today.getFullYear() + 1);
+  }
+
+  return Math.ceil((birthday.getTime() - today.getTime()) / 86400000);
+}
+
 export default function Home() {
   const ROBLOX_USER_ID = '1743461749';
-  const FAVORITE_GAMES = [286090429, 606849621, 142823291];
-  const GROUP_ID = 677727451;
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [daysUntilBirthday, setDaysUntilBirthday] = useState<number | null>(null);
+
+  useEffect(() => {
+    const updateCountdown = () => setDaysUntilBirthday(getDaysUntilBirthday());
+    updateCountdown();
+    const timer = window.setInterval(updateCountdown, 60000);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   return (
-    <main className='min-h-screen bg-[#000000] text-white selection:bg-white selection:text-black font-sans'>
+    <main
+      className='site-shell min-h-screen overflow-hidden text-white selection:bg-white selection:text-black font-sans'
+      onPointerMove={(event) => {
+        event.currentTarget.style.setProperty('--pointer-x', `${event.clientX}px`);
+        event.currentTarget.style.setProperty('--pointer-y', `${event.clientY}px`);
+        event.currentTarget.style.setProperty('--spotlight-opacity', '1');
+      }}
+      onPointerLeave={(event) => event.currentTarget.style.setProperty('--spotlight-opacity', '0')}
+    >
       
       <FadeUpStagger>
-        {/* Navigation Haute */}
-        <nav className='fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center bg-black/50 backdrop-blur-md border-b border-white/5'>
-          <div className='flex items-center gap-2'>
-            <div className='w-2 h-2 bg-white rounded-full animate-pulse'></div>
-            <span className='text-[10px] font-mono tracking-[0.2em] uppercase text-gray-400'>@awafrost</span>
-          </div>
-          <ThemeToggle />
-        </nav>
-
-        <div className='container mx-auto px-6 py-28 lg:py-40 max-w-6xl'>
-          
-          {/* Header - Typographie Blanc vers Gris */}
-          <header className='mb-32'>
-            <FadeUpDiv className='space-y-4'>
-              <h1 className='text-6xl md:text-8xl font-black tracking-tighter bg-gradient-to-b from-white to-gray-600 bg-clip-text text-transparent'>
-                FROST
-              </h1>
-              <p className='text-xs md:text-sm text-gray-500 uppercase tracking-[0.5em] font-light'>
-              </p>
-            </FadeUpDiv>
-          </header>
+        <div className='container mx-auto max-w-6xl px-6 py-16 lg:py-24'>
 
           <div className='grid grid-cols-1 lg:grid-cols-12 gap-16'>
             
@@ -56,13 +58,10 @@ export default function Home() {
             <aside className='lg:col-span-4'>
               <FadeUpDiv>
                 <div className='relative group'>
-                  {/* Animation de l'anneau tournant autour de l'avatar */}
-                  <div className='absolute -inset-2 rounded-full border border-dashed border-white/20 animate-[spin_10s_linear_infinite] group-hover:border-white/40 transition-colors'></div>
-                  
-                  <div className='relative rounded-3xl border border-white/10 bg-[#0a0a0a] p-8 space-y-8'>
+                  <div className='holo-panel relative space-y-8 p-5 sm:p-8'>
                     {/* Avatar (Couleurs préservées) */}
                     <div className='flex justify-center'>
-                      <div className='cursor-pointer transform hover:scale-105 transition-transform duration-500'>
+                      <div className='cursor-pointer transform transition-transform duration-500'>
                         <RobloxAvatar3D 
                           userId={ROBLOX_USER_ID} 
                           width={180} 
@@ -74,30 +73,42 @@ export default function Home() {
 
                     <div className='text-center space-y-2'>
                       <h2 className='text-2xl font-bold tracking-tight text-white'>awafrost</h2>
-                      <div className='inline-block px-3 py-1 rounded-full border border-white/10 bg-white/5'>
-                        <p className='text-[10px] text-gray-400 font-mono uppercase tracking-widest'>Roblox content creator</p>
+                        <div className='inline-block px-3 py-1'>
+                          <p className='text-[10px] text-gray-400 font-mono uppercase tracking-widest'>Présentation personnelle</p>
                       </div>
                     </div>
 
                     {/* Réseaux Sociaux - Style Bouton Industriel */}
                     <div className='grid grid-cols-2 gap-3'>
                       {[
-                        { icon: <FaYoutube size={16} />, link: 'https://www.youtube.com/@awafrost', label: 'Youtube' },
+                        { icon: <FaYoutube size={16} />, link: '/youtube', label: 'Youtube' },
                         { icon: <FaTwitter size={16} />, link: 'https://twitter.com/awafrost', label: 'Twitter' },
-                        { icon: <FaDiscord size={16} />, link: 'https://discord.gg/WgBTgHyjag', label: 'Discord' },
-                        { icon: <Image width={16} height={16} src='/icons/roblox-logo.svg' alt='R' className='invert' />, link: 'https://www.roblox.com/users/1743461749/profile', label: 'Roblox' }
+                        { icon: <FaDiscord size={16} />, link: '/discord', label: 'Discord' },
+                        { icon: <Image width={16} height={16} src='/icons/roblox-logo.svg' alt='R' className='invert' />, link: '/roblox', label: 'Roblox' }
                       ].map((social, index) => (
                         <a
                           key={index}
                           href={social.link}
                           target='_blank'
                           rel='noreferrer'
-                          className='flex items-center gap-3 p-3 rounded-xl bg-[#111111] border border-white/5 hover:border-white/20 hover:bg-[#1a1a1a] transition-all duration-300'
+                          className='holo-link flex items-center gap-3 p-3 transition-all duration-300'
                         >
                           <span className='text-gray-400 group-hover:text-white'>{social.icon}</span>
                           <span className='text-[10px] uppercase font-bold tracking-wider text-gray-500'>{social.label}</span>
                         </a>
                       ))}
+                    </div>
+
+                    <div className='py-4 text-center'>
+                      <p className='text-[10px] font-mono uppercase tracking-widest text-gray-500'>Anniversaire</p>
+                      <p className='mt-2 text-sm font-bold text-white'>15 août</p>
+                      <p className='mt-1 text-xs text-gray-400'>
+                        {daysUntilBirthday === null
+                          ? 'Calcul en cours...'
+                          : daysUntilBirthday === 0
+                            ? "C'est aujourd'hui !"
+                            : `${daysUntilBirthday} jour${daysUntilBirthday === 1 ? '' : 's'} restant${daysUntilBirthday === 1 ? '' : 's'}`}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -109,62 +120,26 @@ export default function Home() {
               
               {/* Section 01 : Data & Stats */}
               <div className='space-y-8'>
-                <div className='flex items-center gap-4'>
-                  <span className='font-mono text-xs text-gray-600'>01</span>
-                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Statistiques Profil</h3>
-                  <div className='h-px flex-grow bg-white/5'></div>
+                <div>
+                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>À propos de moi</h3>
                 </div>
-                <FadeUpDiv className='rounded-3xl border border-white/10 bg-[#0a0a0a] p-8 shadow-2xl'>
-                  <RobloxProfile userId={ROBLOX_USER_ID} />
-                </FadeUpDiv>
-              </div>
-
-              {/* Section 05 : Giveaways */}
-              <div className='space-y-8'>
-                <div className='flex items-center gap-4'>
-                  <span className='font-mono text-xs text-gray-600'>05</span>
-                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Giveaways</h3>
-                  <div className='h-px flex-grow bg-white/5'></div>
-                </div>
-                <FadeUpDiv className='rounded-3xl border border-white/10 bg-[#0a0a0a] p-8'>
-                  <GiveawaySection />
-                </FadeUpDiv>
+                <ScrollReveal>
+                  <FadeUpDiv className='holo-panel p-5 sm:p-8'>
+                    <RobloxProfile userId={ROBLOX_USER_ID} />
+                  </FadeUpDiv>
+                </ScrollReveal>
               </div>
 
               {/* Section 02 : Statut En Direct */}
               <div className='space-y-8'>
-                <div className='flex items-center gap-4'>
-                  <span className='font-mono text-xs text-gray-600'>02</span>
-                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Présence En Direct</h3>
-                  <div className='h-px flex-grow bg-white/5'></div>
+                <div>
+                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Mon activité</h3>
                 </div>
-                <FadeUpDiv className='rounded-3xl border border-white/10 bg-[#0a0a0a] p-8 shadow-2xl'>
-                  <RobloxStatus userId={ROBLOX_USER_ID} />
-                </FadeUpDiv>
-              </div>
-
-              {/* Section 03 : Organisations */}
-              <div className='space-y-8'>
-                <div className='flex items-center gap-4'>
-                  <span className='font-mono text-xs text-gray-600'>03</span>
-                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Groupes & Studios</h3>
-                  <div className='h-px flex-grow bg-white/5'></div>
-                </div>
-                <FadeUpDiv className='rounded-3xl border border-white/10 bg-[#0a0a0a] p-8'>
-                  <GroupCard groupId={GROUP_ID} />
-                </FadeUpDiv>
-              </div>
-
-              {/* Section 04 : Expériences */}
-              <div className='space-y-8'>
-                <div className='flex items-center gap-4'>
-                  <span className='font-mono text-xs text-gray-600'>04</span>
-                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Jeux Favoris</h3>
-                  <div className='h-px flex-grow bg-white/5'></div>
-                </div>
-                <FadeUpDiv className='rounded-3xl border border-white/10 bg-[#0a0a0a] p-8'>
-                  <FavoritesGames gameIds={FAVORITE_GAMES} />
-                </FadeUpDiv>
+                <ScrollReveal>
+                  <FadeUpDiv className='holo-panel p-5 sm:p-8'>
+                    <RobloxStatus userId={ROBLOX_USER_ID} />
+                  </FadeUpDiv>
+                </ScrollReveal>
               </div>
 
             </section>
@@ -181,12 +156,12 @@ export default function Home() {
       <WelcomeMessage />
 
       {/* Footer */}
-      <footer className='py-20 border-t border-white/5'>
+      <footer className='site-footer py-12 sm:py-20'>
         <div className='container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4'>
           <p className='text-[10px] text-gray-600 font-mono tracking-widest uppercase'>© 2026 Awaji Frost</p>
-          <div className='flex gap-8 text-[10px] text-gray-500 font-mono uppercase tracking-widest'>
-            <a href='/confidentialite' className='hover:text-white transition-colors'>Protection des données</a>
-            <a href='/conditions' className='hover:text-white transition-colors'>ToS</a>
+          <div className='flex flex-wrap justify-center gap-3 text-[10px] text-gray-500 font-mono uppercase tracking-widest'>
+            <a href='/conditions' target='_blank' rel='noreferrer' className='legal-link px-3 py-2 transition-colors hover:text-white'>Conditions d&apos;utilisation</a>
+            <a href='/confidentialite' target='_blank' rel='noreferrer' className='legal-link px-3 py-2 transition-colors hover:text-white'>Confidentialité</a>
           </div>
         </div>
       </footer>
