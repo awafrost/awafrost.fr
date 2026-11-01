@@ -20,6 +20,21 @@ const wearableAssetTypes = new Set([
 const HEADLESS_FIXED_PRICE = 31000;
 const KORBLOX_FIXED_PRICE = 17000;
 
+const FIXED_AVATAR_BUNDLES = [
+  {
+    id: 201,
+    name: 'Headless Horseman',
+    price: HEADLESS_FIXED_PRICE,
+    assetIds: new Set([134082453, 134082473, 134082507, 134082533, 134082557, 131592085, 15093053680]),
+  },
+  {
+    id: 192,
+    name: 'Korblox Deathspeaker',
+    price: KORBLOX_FIXED_PRICE,
+    assetIds: new Set([139607570, 139607625, 139607673, 139607718, 139607770, 139610147]),
+  },
+];
+
 function fixedAvatarPrice(name: string): number | null {
   const normalizedName = name.toLocaleLowerCase('en');
   if (normalizedName.includes('headless')) return HEADLESS_FIXED_PRICE;
@@ -82,6 +97,7 @@ interface EconomyDetails {
   PriceInRobux?: number | null;
   IsForSale?: boolean;
   IsLimited?: boolean;
+  IsLimitedUnique?: boolean;
   CollectiblesItemDetails?: { CollectibleLowestResalePrice?: number | null };
 }
 
@@ -177,8 +193,22 @@ async function loadDashboard(userId: string) {
     });
 
   const wearableAssets = (avatarData?.assets ?? []).filter((asset) => asset.assetType && wearableAssetTypes.has(asset.assetType.id));
+  const wornAssetIds = new Set(wearableAssets.map((asset) => asset.id));
+  const fixedBundlesWorn = FIXED_AVATAR_BUNDLES.filter((bundle) => [...bundle.assetIds].some((assetId) => wornAssetIds.has(assetId)));
+  const fixedBundleAssetIds = new Set(fixedBundlesWorn.flatMap((bundle) => [...bundle.assetIds]));
+  const fixedBundleItems = fixedBundlesWorn.map((bundle) => ({
+    id: bundle.id,
+    name: bundle.name,
+    assetType: 'Bundle de corps',
+    price: bundle.price,
+    forSale: true,
+    url: `https://www.roblox.com/bundles/${bundle.id}`,
+  }));
+
   const bodyAssetTypes = new Set([17, 27, 28, 29, 30, 31, 79]);
-  const bodyAssets = wearableAssets.filter((asset) => asset.assetType && bodyAssetTypes.has(asset.assetType.id));
+  const bodyAssets = wearableAssets.filter((asset) =>
+    asset.assetType && bodyAssetTypes.has(asset.assetType.id) && !fixedBundleAssetIds.has(asset.id),
+  );
   const torsoAsset = bodyAssets.find((asset) => asset.assetType?.id === 27);
   const bodyBundles = torsoAsset
     ? await optionalJson<{ data?: BodyBundle[] }>(
@@ -205,28 +235,17 @@ async function loadDashboard(userId: string) {
       || b.matchedBodyIds.length - a.matchedBodyIds.length);
   const selectedBodyBundle = bundleCandidates[0] ?? null;
   const bundledBodyIds = new Set(selectedBodyBundle?.matchedBodyIds ?? []);
-  const remainingAssets = wearableAssets.filter((asset) => !bundledBodyIds.has(asset.id));
+  const remainingAssets = wearableAssets.filter((asset) => !bundledBodyIds.has(asset.id) && !fixedBundleAssetIds.has(asset.id));
 
   const avatarItems = await mapWithConcurrency(remainingAssets, 4, async (asset) => {
-    const fixedPrice = fixedAvatarPrice(asset.name);
-    if (fixedPrice !== null) {
-      return {
-        id: asset.id,
-        name: asset.name,
-        assetType: asset.assetType?.name ?? 'Objet avatar',
-        price: fixedPrice,
-        forSale: true,
-        url: `https://www.roblox.com/catalog/${asset.id}`,
-      };
-    }
-
     const details = await optionalJson<EconomyDetails>(
       `asset-price:${asset.id}`,
       `https://economy.roblox.com/v2/assets/${asset.id}/details`,
       CACHE.prices,
     );
     const resalePrice = details?.CollectiblesItemDetails?.CollectibleLowestResalePrice;
-    const currentPrice = details?.IsLimited && typeof resalePrice === 'number'
+    const isCollectibleLimited = details?.IsLimited === true || details?.IsLimitedUnique === true;
+    const currentPrice = isCollectibleLimited && typeof resalePrice === 'number' && resalePrice > 0
       ? resalePrice
       : details?.IsForSale && typeof details.PriceInRobux === 'number'
         ? details.PriceInRobux
@@ -254,7 +273,7 @@ async function loadDashboard(userId: string) {
     forSale: selectedBodyBundle.bundle.product?.isForSale ?? selectedBodyBundle.bundle.collectibleItemDetail?.saleStatus === 'OnSale',
     url: `https://www.roblox.com/bundles/${selectedBodyBundle.bundle.id}`,
   } : null;
-  const allAvatarItems = [...avatarItems, ...(bodyBundleItem ? [bodyBundleItem] : [])];
+  const allAvatarItems = [...avatarItems, ...fixedBundleItems, ...(bodyBundleItem ? [bodyBundleItem] : [])];
   const pricedAvatarItems = allAvatarItems.filter((item) => item.price !== null);
   const avatarTotalPrice = pricedAvatarItems.reduce((sum, item) => sum + (item.price ?? 0), 0);
 
