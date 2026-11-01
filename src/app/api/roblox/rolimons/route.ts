@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { dashboardCacheHeaders, fetchRobloxJson } from '@/lib/roblox-api';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,23 +13,25 @@ export async function GET(request: NextRequest) {
   try {
     const userId = request.nextUrl.searchParams.get('userId');
 
-    if (!userId) {
-      return Response.json({ error: 'userId is required' }, { status: 400 });
+    if (!userId || !/^\d{1,20}$/.test(userId)) {
+      return Response.json({ error: 'A valid numeric userId is required' }, { status: 400 });
     }
 
     // Requêtes parallèles vers les APIs Rolimons
     const [assetsRes, playerInfoRes] = await Promise.allSettled([
       // Récupérer le statut en ligne et premium
-      fetch(
+      fetchRobloxJson<{ premium?: boolean; isOnline?: boolean; lastLocation?: string }>(
         `https://api.rolimons.com/players/v1/playerassets/${userId}`,
-        axiosHeadersConfig
-      ).then(r => r.json()).catch(() => null),
+        60,
+        axiosHeadersConfig,
+      ),
       
       // Récupérer la valeur totale de l'inventaire
-      fetch(
+      fetchRobloxJson<{ success?: boolean; value?: number }>(
         `https://api.rolimons.com/players/v1/playerinfo/${userId}`,
-        axiosHeadersConfig
-      ).then(r => r.json()).catch(() => null)
+        300,
+        axiosHeadersConfig,
+      )
     ]);
 
     let isPremium = false;
@@ -83,7 +86,7 @@ export async function GET(request: NextRequest) {
       rolimonsValue,
       inventoryStatus,
       lastLocation,
-    });
+    }, { headers: dashboardCacheHeaders });
   } catch (error) {
     console.error('Error fetching Rolimons data:', error);
     return Response.json({ error: 'Failed to fetch Rolimons data' }, { status: 500 });

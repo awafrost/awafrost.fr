@@ -1,9 +1,8 @@
 'use client';
 
 import { FadeUpDiv, FadeUpStagger, ScrollReveal } from '@/components/animation';
-import { RobloxAvatar3D } from '@/components/roblox-avatar-3d';
-import { RobloxProfile } from '@/components/roblox-profile';
-import { RobloxStatus } from '@/components/roblox-status';
+import { RobloxAvatar } from '@/components/roblox-avatar';
+import { RobloxDashboard } from '@/components/roblox-dashboard';
 import { ProfileModal } from '@/components/profile-modal';
 import { WelcomeMessage } from '@/components/welcome-message';
 import Image from 'next/image';
@@ -62,10 +61,10 @@ export default function Home() {
                     {/* Avatar (Couleurs préservées) */}
                     <div className='flex justify-center'>
                       <div className='cursor-pointer transform transition-transform duration-500'>
-                        <RobloxAvatar3D 
+                        <RobloxAvatar 
                           userId={ROBLOX_USER_ID} 
-                          width={180} 
-                          height={180} 
+                          width={240} 
+                          height={270} 
                           onAvatarClick={() => setIsProfileModalOpen(true)}
                         />
                       </div>
@@ -116,32 +115,12 @@ export default function Home() {
             </aside>
 
             {/* Zone de Contenu - Triée par Catégories */}
-            <section className='lg:col-span-8 space-y-20'>
-              
-              {/* Section 01 : Data & Stats */}
-              <div className='space-y-8'>
-                <div>
-                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>À propos de moi</h3>
-                </div>
-                <ScrollReveal>
-                  <FadeUpDiv className='holo-panel p-5 sm:p-8'>
-                    <RobloxProfile userId={ROBLOX_USER_ID} />
-                  </FadeUpDiv>
-                </ScrollReveal>
-              </div>
-
-              {/* Section 02 : Statut En Direct */}
-              <div className='space-y-8'>
-                <div>
-                  <h3 className='text-xs font-bold uppercase tracking-[0.3em] text-white'>Mon activité</h3>
-                </div>
-                <ScrollReveal>
-                  <FadeUpDiv className='holo-panel p-5 sm:p-8'>
-                    <RobloxStatus userId={ROBLOX_USER_ID} />
-                  </FadeUpDiv>
-                </ScrollReveal>
-              </div>
-
+            <section className='lg:col-span-8'>
+              <ScrollReveal>
+                <FadeUpDiv className='holo-panel p-5 sm:p-8'>
+                  <RobloxDashboard userId={ROBLOX_USER_ID} />
+                </FadeUpDiv>
+              </ScrollReveal>
             </section>
           </div>
         </div>

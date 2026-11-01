@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { dashboardCacheHeaders, fetchRobloxJson } from '@/lib/roblox-api';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,7 +11,11 @@ export async function GET(request: NextRequest) {
       return Response.json({ error: 'gameIds is required' }, { status: 400 });
     }
 
-    const gameIdArray = gameIds.split(',').map(id => parseInt(id));
+    const gameIdArray = [...new Set(gameIds.split(',').map((id) => id.trim()))];
+    if (gameIdArray.length > 10 || gameIdArray.some((id) => !/^\d{1,20}$/.test(id))) {
+      return Response.json({ error: 'Provide up to 10 numeric gameIds' }, { status: 400 });
+    }
+    const numericGameIds = gameIdArray.map(Number);
 
     // Carte de placeIds vers universeIds pour les jeux connus
     const universeMap: Record<number, number> = {
@@ -23,7 +28,7 @@ export async function GET(request: NextRequest) {
     const universeIds: number[] = [];
     const placeIdToGameId: Record<number, number> = {};
 
-    for (const gameId of gameIdArray) {
+    for (const gameId of numericGameIds) {
       if (universeMap[gameId]) {
         // Jeu connu dans la carte
         universeIds.push(universeMap[gameId]);
@@ -31,15 +36,12 @@ export async function GET(request: NextRequest) {
       } else {
         // Jeu inconnu - essayer de récupérer l'universeId via l'API
         try {
-          const detailRes = await fetch(`https://apis.roblox.com/universes/v1/places/${gameId}/universe`, {
-            headers: { 'Accept': 'application/json' }
-          });
-          if (detailRes.ok) {
-            const detailData = await detailRes.json();
-            if (detailData.universeId) {
-              universeIds.push(detailData.universeId);
-              placeIdToGameId[detailData.universeId] = gameId;
-            }
+          const detailData = await fetchRobloxJson<{ universeId?: number }>(
+            `https://apis.roblox.com/universes/v1/places/${gameId}/universe`, 3600,
+          );
+          if (detailData.universeId) {
+            universeIds.push(detailData.universeId);
+            placeIdToGameId[detailData.universeId] = gameId;
           }
         } catch (err) {
           console.error(`Could not fetch universeId for placeId ${gameId}:`, err);
@@ -52,17 +54,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Obtenir les données complètes depuis l'API publique de Roblox
-    const gamesRes = await fetch(
+    const gamesData = await fetchRobloxJson<{ data?: Array<{ id: number; rootPlaceId: number; name: string; description?: string; playing?: number; visits?: number; favoritedCount?: number }> }>(
       `https://games.roblox.com/v1/games?universeIds=${universeIds.join(',')}`,
-      { headers: { 'Accept': 'application/json' } }
+      1800,
     );
-
-    if (!gamesRes.ok) {
-      console.error('Erreur API Roblox games:', gamesRes.status);
-      return Response.json({ games: [] });
-    }
-
-    const gamesData = await gamesRes.json();
 
     if (!gamesData.data || !Array.isArray(gamesData.data)) {
       return Response.json({ games: [] });
@@ -76,16 +71,12 @@ export async function GET(request: NextRequest) {
 
         try {
           // Essayer d'obtenir l'image via l'API thumbnails de Roblox
-          const thumbnailRes = await fetch(
+          const thumbData = await fetchRobloxJson<{ data?: Array<{ imageUrl?: string }> }>(
             `https://thumbnails.roblox.com/v1/games/universes/${game.id}/thumbnail?size=768x432&format=Png&isCircular=false`,
-            { headers: { 'Accept': 'application/json' } }
+            3600,
           );
-
-          if (thumbnailRes.ok) {
-            const thumbData = await thumbnailRes.json();
-            if (thumbData.data && thumbData.data[0] && thumbData.data[0].imageUrl) {
-              imageUrl = thumbData.data[0].imageUrl;
-            }
+          if (thumbData.data?.[0]?.imageUrl) {
+            imageUrl = thumbData.data[0].imageUrl;
           }
 
           // Si pas d'image via l'API thumbnails, essayer via og:image du site
@@ -130,7 +121,7 @@ export async function GET(request: NextRequest) {
 
     return Response.json({
       games: gamesWithImages,
-    });
+    }, { headers: dashboardCacheHeaders });
   } catch (error) {
     console.error('Erreur lors de la récupération des jeux Roblox:', error);
     return Response.json({ games: [], error: 'Failed to fetch games' }, { status: 500 });
