@@ -60,12 +60,6 @@ interface AvatarData {
   assets?: AvatarAsset[];
 }
 
-interface FriendRecord {
-  id: number;
-  name: string;
-  displayName: string;
-}
-
 interface PresenceRecord {
   userId: number;
   userPresenceType: number;
@@ -153,44 +147,13 @@ async function loadDashboard(userId: string) {
     optionalJson<{ data?: GroupRole[] }>(`groups:${userId}`, `https://groups.roblox.com/v2/users/${userId}/groups/roles`, CACHE.groups),
   ]);
 
-  // Roblox blocks public friend-list access for this account (403); keep the count and avoid retrying a known-failing endpoint.
-  const friendRecords: FriendRecord[] = [];
-  const presenceIds = [numericUserId, ...friendRecords.map((friend) => friend.id)];
   const presenceResult = await optionalJson<{ userPresences?: PresenceRecord[] }>(
-    `presence:${presenceIds.join(',')}`,
+    `presence:${numericUserId}`,
     'https://presence.roblox.com/v1/presence/users',
     CACHE.presence,
-    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userIds: presenceIds }) },
+    { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userIds: [numericUserId] }) },
   );
   const presenceByUserId = new Map((presenceResult?.userPresences ?? []).map((presence) => [presence.userId, presence]));
-
-  const friendThumbnailResult = friendRecords.length
-    ? await optionalJson<{ data?: Array<{ targetId: number; imageUrl: string }> }>(
-      `friend-thumbnails:${friendRecords.map((friend) => friend.id).join(',')}`,
-      `https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${friendRecords.map((friend) => friend.id).join(',')}&size=100x100&format=Png&isCircular=false`,
-      CACHE.thumbnails,
-    )
-    : null;
-  const friendImageById = new Map((friendThumbnailResult?.data ?? []).map((thumb) => [thumb.targetId, thumb.imageUrl]));
-
-  const friends = friendRecords
-    .map((friend) => {
-      const presence = presenceByUserId.get(friend.id);
-      return {
-        id: friend.id,
-        username: friend.name,
-        displayName: friend.displayName,
-        avatarUrl: friendImageById.get(friend.id) ?? null,
-        presenceType: presence?.userPresenceType ?? null,
-        status: presenceLabel(presence?.userPresenceType),
-        lastLocation: presence?.userPresenceType === 2 ? presence.lastLocation ?? null : null,
-        profileUrl: `https://www.roblox.com/users/${friend.id}/profile`,
-      };
-    })
-    .sort((a, b) => {
-      const order = (value: number | null) => value === 2 ? 0 : value === 1 ? 1 : value === 3 ? 2 : value === 0 ? 3 : 4;
-      return order(a.presenceType) - order(b.presenceType) || a.username.localeCompare(b.username);
-    });
 
   const wearableAssets = (avatarData?.assets ?? []).filter((asset) => asset.assetType && wearableAssetTypes.has(asset.assetType.id));
   const wornAssetIds = new Set(wearableAssets.map((asset) => asset.id));
@@ -373,11 +336,6 @@ async function loadDashboard(userId: string) {
       unpricedItems: Math.max(0, allAvatarItems.length - pricedAvatarItems.length),
       bodyBundle: bodyBundleItem?.name ?? null,
       items: allAvatarItems.sort((a, b) => (b.price ?? -1) - (a.price ?? -1)),
-    },
-    friends: {
-      available: false,
-      message: 'Roblox ne donne pas accès publiquement à la liste d’amis de ce compte.',
-      items: friends,
     },
     favoriteGames: visibleFavoriteGames.map((game) => ({
       id: game.id,

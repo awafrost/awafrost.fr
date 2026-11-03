@@ -1,0 +1,28 @@
+{
+  "id": "sets:sakura-set",
+  "slug": "sakura-set",
+  "name": "Sakura Set",
+  "category": "sets",
+  "value": 2730,
+  "valueType": "numeric",
+  "tieredValue": null,
+  "valueDisplay": "2,730",
+  "range": null,
+  "score": 0.952054794520548,
+  "scoreClass": "val-top",
+  "stability": "Stable",
+  "demand": 6,
+  "rarity": 4,
+  "origin": null,
+  "difference": 20,
+  "percentageChange": 0.7,
+  "aliases": [
+    "Sak Set"
+  ],
+  "flippability": "Rarely Flippable",
+  "riseChance": 10,
+  "wikiLink": null,
+  "imageKey": "mm2godlies/Sakura",
+  "className": null,
+  "isExp": true
+}

@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import {
   FaDiscord,
+  FaSearch,
   FaTwitter,
   FaYoutube,
 } from 'react-icons/fa';
@@ -83,7 +84,8 @@ export default function Home() {
                         { icon: <FaYoutube size={16} />, link: '/youtube', label: 'Youtube' },
                         { icon: <FaTwitter size={16} />, link: 'https://twitter.com/awafrost', label: 'Twitter' },
                         { icon: <FaDiscord size={16} />, link: '/discord', label: 'Discord' },
-                        { icon: <Image width={16} height={16} src='/icons/roblox-logo.svg' alt='R' className='invert' />, link: '/roblox', label: 'Roblox' }
+                        { icon: <Image width={16} height={16} src='/icons/roblox-logo.svg' alt='R' className='invert' />, link: '/roblox', label: 'Roblox' },
+                        { icon: <FaSearch size={16} />, link: '/mm2-values', label: 'Valeurs MM2' }
                       ].map((social, index) => (
                         <a
                           key={index}

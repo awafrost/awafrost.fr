@@ -1,0 +1,29 @@
+{
+  "id": "chromas:chroma-sunrise",
+  "slug": "chroma-sunrise",
+  "name": "Chroma Sunrise",
+  "category": "chromas",
+  "value": 10750,
+  "valueType": "numeric",
+  "tieredValue": null,
+  "valueDisplay": "10,750",
+  "range": null,
+  "score": 0.9726027397260274,
+  "scoreClass": "val-top",
+  "stability": "Stable",
+  "demand": 5,
+  "rarity": 5,
+  "origin": "Summer 2025 (Unboxed)",
+  "difference": -250,
+  "percentageChange": -2.3,
+  "aliases": [
+    "CSunrise",
+    "CSR"
+  ],
+  "flippability": "Rarely Flippable",
+  "riseChance": 10,
+  "wikiLink": "Chroma_Sunrise",
+  "imageKey": "mm2chromas/CSR",
+  "className": null,
+  "isExp": true
+}

@@ -23,20 +23,6 @@ interface DashboardData {
     bodyBundle: string | null;
     items: Array<{ id: number; name: string; assetType: string; price: number | null; forSale: boolean; url: string }>;
   };
-  friends: {
-    available: boolean;
-    message: string | null;
-    items: Array<{
-      id: number;
-      username: string;
-      displayName: string;
-      avatarUrl: string | null;
-      presenceType: number | null;
-      status: string;
-      lastLocation: string | null;
-      profileUrl: string;
-    }>;
-  };
   favoriteGames: Array<{ id: number; name: string; rootPlaceId: number | null; visits: number | null; imageUrl: string | null; url: string }>;
   ownerGroups: Array<{
     id: number;
@@ -203,31 +189,6 @@ export function RobloxDashboard({ userId }: RobloxDashboardProps) {
           <div className="min-w-0"><p className="text-[9px] uppercase tracking-[0.16em] text-white/40">Code du serveur</p><p className="mt-1 break-all font-mono text-xs text-white/75">{data.privateServer.code}</p></div>
           <button type="button" onClick={copyPrivateServer} className="shrink-0 rounded-lg border border-white/10 px-3 py-2 text-[9px] font-bold uppercase tracking-wider text-white/55 transition hover:border-violet-200/30 hover:text-white">{copied ? 'Copié' : 'Copier le code'}</button>
         </div>
-      </section>
-
-      <section className="space-y-4 border-b border-white/10 pb-7">
-        <SectionHeading title="Amis" detail={`${data.friends.items.length} affichés`} />
-        {!data.friends.available ? (
-          <p className="border-l border-white/15 py-2 pl-3 text-xs leading-5 text-white/45">{data.friends.message}</p>
-        ) : data.friends.items.length === 0 ? (
-          <p className="text-xs text-white/45">Aucun ami public à afficher.</p>
-        ) : (
-          <div className="grid gap-x-6 sm:grid-cols-2">
-            {data.friends.items.map((friend) => (
-              <a key={friend.id} href={friend.profileUrl} target="_blank" rel="noreferrer" className="flex min-w-0 items-center gap-3 border-b border-white/[0.07] py-3 transition hover:bg-white/[0.025]">
-                {friend.avatarUrl ? (
-                  <Image src={friend.avatarUrl} alt={`Avatar de ${friend.displayName}`} width={44} height={44} className="h-11 w-11 rounded-full bg-white/5 object-cover" unoptimized />
-                ) : <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/5 text-sm text-white/40">{friend.displayName.slice(0, 1)}</span>}
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-xs font-semibold text-white/85">{friend.displayName}</span>
-                  <span className="mt-0.5 block truncate text-[10px] text-white/40">@{friend.username}</span>
-                  {friend.lastLocation && <span className="mt-1 block truncate text-[9px] text-emerald-200/65">{friend.lastLocation}</span>}
-                </span>
-                <PresenceBadge type={friend.presenceType} label={friend.status} />
-              </a>
-            ))}
-          </div>
-        )}
       </section>
 
       <section className="overflow-hidden rounded-2xl border border-violet-200/10 bg-gradient-to-br from-violet-500/[0.08] to-white/[0.015]">

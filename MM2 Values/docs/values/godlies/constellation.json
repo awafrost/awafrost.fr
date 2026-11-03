@@ -1,0 +1,28 @@
+{
+  "id": "godlies:constellation",
+  "slug": "constellation",
+  "name": "Constellation",
+  "category": "godlies",
+  "value": 2700,
+  "valueType": "numeric",
+  "tieredValue": null,
+  "valueDisplay": "2,700",
+  "range": null,
+  "score": 0.952054794520548,
+  "scoreClass": "val-top",
+  "stability": "Stable",
+  "demand": 5,
+  "rarity": 4,
+  "origin": "Christmas 2024 (Unboxed)",
+  "difference": -50,
+  "percentageChange": -1.8,
+  "aliases": [
+    "Const"
+  ],
+  "flippability": "Rarely Flippable",
+  "riseChance": 5,
+  "wikiLink": "Constellation",
+  "imageKey": "mm2godlies/Constellation",
+  "className": null,
+  "isExp": true
+}

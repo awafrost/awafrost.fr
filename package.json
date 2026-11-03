@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "mm2:sync": "node scripts/sync-mm2-values.mjs",
+    "mm2:refresh": "npm --prefix \"MM2 Values\" run refresh:static && node scripts/sync-mm2-values.mjs"
   },
   "dependencies": {
     "@nextui-org/react": "2.1.13",

@@ -112,6 +112,22 @@ src/
 
 ## 🚀 Déploiement
 
+### Valeurs Murder Mystery 2
+
+Le dossier `MM2 Values/` contient le collecteur et son snapshot de secours. Le workflow GitHub Actions `Refresh local MM2 values` lit directement les pages Supreme Values toutes les 10 minutes, 24 h/24, met à jour `data/mm2-values.json` et commit uniquement si les données changent. Vercel déploie ensuite ce fichier avec le site : les visiteurs et l’API du site ne contactent ni le dépôt de données ni la source Supreme. GitHub peut retarder un job planifié et la cadence dépend aussi de la publication de la source; ce n’est donc pas du temps réel à la seconde.
+
+Pour lancer une mise à jour manuellement sur un poste local :
+
+```powershell
+Push-Location 'MM2 Values'
+npm ci
+npx playwright install chromium
+Pop-Location
+pnpm mm2:refresh
+```
+
+Pour un rafraîchissement local des données déjà collectées, sans lancer Chromium, utiliser `pnpm mm2:sync`. Si la source ne répond pas ou si une collecte est incomplète, le dernier snapshot valide est conservé. Les entrées Godly sentinelles Batwing, Black Luger et Mortal Blade sont écartées lors de la synchronisation.
+
 ### Vercel (Recommandé)
 
 Les giveaways utilisent Vercel Postgres. Après avoir créé une base depuis l’intégration Vercel, ajoutez automatiquement ses variables d’environnement au projet, puis configurez aussi :

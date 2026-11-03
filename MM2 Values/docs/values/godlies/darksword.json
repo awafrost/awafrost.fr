@@ -1,0 +1,28 @@
+{
+  "id": "godlies:darksword",
+  "slug": "darksword",
+  "name": "Darksword",
+  "category": "godlies",
+  "value": 1775,
+  "valueType": "numeric",
+  "tieredValue": null,
+  "valueDisplay": "1,775",
+  "range": null,
+  "score": 0.9269406392694064,
+  "scoreClass": "val-top",
+  "stability": "Stable",
+  "demand": 6,
+  "rarity": 4,
+  "origin": "Halloween 2023 (Item Pack)",
+  "difference": 25,
+  "percentageChange": 1.4,
+  "aliases": [
+    "DSword"
+  ],
+  "flippability": "Rarely Flippable",
+  "riseChance": 10,
+  "wikiLink": "Darksword",
+  "imageKey": "mm2godlies/Darksword",
+  "className": null,
+  "isExp": true
+}

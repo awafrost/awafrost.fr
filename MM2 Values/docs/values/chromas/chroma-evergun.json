@@ -1,0 +1,34 @@
+{
+  "id": "chromas:chroma-evergun",
+  "slug": "chroma-evergun",
+  "name": "Chroma Evergun",
+  "category": "chromas",
+  "value": 57000,
+  "valueType": "numeric",
+  "tieredValue": null,
+  "valueDisplay": "57,000",
+  "range": {
+    "min": 55000,
+    "max": 57000,
+    "display": "55,000 - 57,000"
+  },
+  "score": 0.9908675799086758,
+  "scoreClass": "val-top",
+  "stability": "Underpaid For",
+  "demand": 7,
+  "rarity": 8,
+  "origin": "Christmas 2023 (Gifting)",
+  "difference": -1000,
+  "percentageChange": -1.7,
+  "aliases": [
+    "CEvergun",
+    "CEGun",
+    "CEG"
+  ],
+  "flippability": "Rarely Flippable",
+  "riseChance": 0,
+  "wikiLink": "Chroma_Evergun",
+  "imageKey": "mm2chromas/CEvergun",
+  "className": null,
+  "isExp": true
+}

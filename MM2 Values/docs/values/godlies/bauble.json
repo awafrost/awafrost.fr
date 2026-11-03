@@ -1,0 +1,28 @@
+{
+  "id": "godlies:bauble",
+  "slug": "bauble",
+  "name": "Bauble",
+  "category": "godlies",
+  "value": 675,
+  "valueType": "numeric",
+  "tieredValue": null,
+  "valueDisplay": "675",
+  "range": null,
+  "score": 0.9018264840182648,
+  "scoreClass": "val-top",
+  "stability": "Stable",
+  "demand": 5,
+  "rarity": 4,
+  "origin": "Christmas 2024 (Gifting 100 Gifts)",
+  "difference": -25,
+  "percentageChange": -3.6,
+  "aliases": [
+    "Baub"
+  ],
+  "flippability": "Rarely Flippable",
+  "riseChance": 10,
+  "wikiLink": "Bauble",
+  "imageKey": "mm2godlies/Bauble",
+  "className": null,
+  "isExp": true
+}

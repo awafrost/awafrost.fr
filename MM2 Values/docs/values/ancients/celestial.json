@@ -1,0 +1,33 @@
+{
+  "id": "ancients:celestial",
+  "slug": "celestial",
+  "name": "Celestial",
+  "category": "ancients",
+  "value": 2300,
+  "valueType": "numeric",
+  "tieredValue": null,
+  "valueDisplay": "2,300",
+  "range": {
+    "min": 2250,
+    "max": 2300,
+    "display": "2,250 - 2,300"
+  },
+  "score": 0.9429223744292238,
+  "scoreClass": "val-top",
+  "stability": "Receding",
+  "demand": 5,
+  "rarity": 4,
+  "origin": "Christmas 2024 (Tier 20)",
+  "difference": -50,
+  "percentageChange": -2.1,
+  "aliases": [
+    "Cel",
+    "Celest"
+  ],
+  "flippability": "Rarely Flippable",
+  "riseChance": 0,
+  "wikiLink": "Celestial",
+  "imageKey": "mm2ancients/Celestial",
+  "className": null,
+  "isExp": true
+}

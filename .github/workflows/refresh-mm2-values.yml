@@ -1,0 +1,66 @@
+name: Refresh local MM2 values
+
+on:
+  schedule:
+    - cron: "3,13,23,33,43,53 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "MM2 Values/**"
+      - ".github/workflows/refresh-mm2-values.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-mm2-values
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out this project
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: "MM2 Values/package-lock.json"
+
+      - name: Install local collector dependencies
+        working-directory: MM2 Values
+        run: npm ci
+
+      - name: Install Chromium for Supreme Values collection
+        working-directory: MM2 Values
+        run: npx playwright install --with-deps chromium
+
+      - name: Collect current values from Supreme Values
+        working-directory: MM2 Values
+        env:
+          SOURCE_HEADLESS: "true"
+          SOURCE_TIMEOUT_MS: "90000"
+          SOURCE_DELAY_MS: "750"
+          LOG_LEVEL: info
+        run: npm run refresh:static
+
+      - name: Update the dataset bundled with the Vercel app
+        run: node scripts/sync-mm2-values.mjs
+
+      - name: Commit changed local values
+        shell: bash
+        run: |
+          if git diff --quiet -- data/mm2-values.json; then
+            echo "MM2 values are unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/mm2-values.json
+          git commit -m "chore: refresh local MM2 values"
+          git push

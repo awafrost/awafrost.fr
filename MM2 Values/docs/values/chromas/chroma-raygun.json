@@ -1,0 +1,29 @@
+{
+  "id": "chromas:chroma-raygun",
+  "slug": "chroma-raygun",
+  "name": "Chroma Raygun",
+  "category": "chromas",
+  "value": 14000,
+  "valueType": "numeric",
+  "tieredValue": null,
+  "valueDisplay": "14,000",
+  "range": null,
+  "score": 0.9748858447488584,
+  "scoreClass": "val-top",
+  "stability": "Stable",
+  "demand": 6,
+  "rarity": 5,
+  "origin": "Halloween 2025 (Tier 25)",
+  "difference": 250,
+  "percentageChange": 1.8,
+  "aliases": [
+    "CRG",
+    "CRay"
+  ],
+  "flippability": "Rarely Flippable",
+  "riseChance": 10,
+  "wikiLink": "Chroma_Raygun",
+  "imageKey": "mm2chromas/CRG",
+  "className": null,
+  "isExp": true
+}
