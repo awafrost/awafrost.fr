@@ -245,7 +245,6 @@ export function MM2ValuesExplorer() {
             La publication source date du {formatDate(dataset.fetchedAt)}. Les valeurs sont servies depuis ta copie locale ; la source n’a pas encore publié de snapshot plus récent.
           </div>
         )}
-        {dataset && <p className="px-1 text-[10px] leading-5 text-white/40">Pour remplacer le fichier local par la dernière publication disponible : exécute <span className="font-mono text-white/60">pnpm mm2:sync</span>, puis redéploie le site. Les visites du site ne contactent pas GitHub.</p>}
         {error && <div role="alert" className="rounded-xl border border-rose-200/15 bg-rose-300/[0.05] px-4 py-3 text-xs text-rose-100/80">{error}</div>}
 
         <section className="overflow-hidden rounded-2xl border border-white/[0.09] bg-[#0b0b12]/90">
