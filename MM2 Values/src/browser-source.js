@@ -21,10 +21,28 @@ export function createBrowserLoader(options, logger) {
   return async function loadValues() {
     await fs.mkdir(options.browserProfileDir, { recursive: true });
 
-    const context = await chromium.launchPersistentContext(options.browserProfileDir, {
-      headless: options.sourceHeadless,
-      ...(options.browserExecutablePath ? { executablePath: options.browserExecutablePath } : {}),
-    });
+    let browser = null;
+    let context;
+    let hasStorageState = false;
+    try {
+      await fs.access(options.browserStorageStateFile);
+      hasStorageState = true;
+    } catch {
+      // Fall back to the persistent local profile when no exported state exists.
+    }
+
+    if (hasStorageState) {
+      browser = await chromium.launch({
+        headless: options.sourceHeadless,
+        ...(options.browserExecutablePath ? { executablePath: options.browserExecutablePath } : {}),
+      });
+      context = await browser.newContext({ storageState: options.browserStorageStateFile });
+    } else {
+      context = await chromium.launchPersistentContext(options.browserProfileDir, {
+        headless: options.sourceHeadless,
+        ...(options.browserExecutablePath ? { executablePath: options.browserExecutablePath } : {}),
+      });
+    }
 
     const page = context.pages()[0] || await context.newPage();
     const categoryResults = [];
@@ -34,12 +52,20 @@ export function createBrowserLoader(options, logger) {
         const url = `${options.sourceBaseUrl}/${encodeURIComponent(category)}`;
         logger.info("Fetching source category", { category, url });
 
-        const response = await page.goto(url, {
-          waitUntil: "domcontentloaded",
-          timeout: options.sourceTimeoutMs,
-        });
-        if (!response) throw new Error(`Navigation returned no response for ${url}`);
-        if (!response.ok()) throw new Error(`Source returned HTTP ${response.status()} for ${url}`);
+        let response = null;
+        for (let attempt = 1; attempt <= 3; attempt += 1) {
+          response = await page.goto(url, {
+            waitUntil: "domcontentloaded",
+            timeout: options.sourceTimeoutMs,
+          });
+          if (response?.ok()) break;
+          if (!response) throw new Error(`Navigation returned no response for ${url}`);
+          if (response.status() !== 403 || attempt === 3) {
+            throw new Error(`Source returned HTTP ${response.status()} for ${url}`);
+          }
+          logger.warn("Source returned 403; retrying after cooldown", { category, attempt });
+          await sleep(Math.max(options.sourceDelayMs, 10_000));
+        }
 
         try {
           await page.waitForFunction(
@@ -122,6 +148,7 @@ export function createBrowserLoader(options, logger) {
       };
     } finally {
       await context.close();
+      if (browser) await browser.close();
     }
   };
 }

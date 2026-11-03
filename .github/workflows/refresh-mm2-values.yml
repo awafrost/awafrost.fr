@@ -40,14 +40,28 @@ jobs:
         working-directory: MM2 Values
         run: npx playwright install --with-deps chromium
 
+      - name: Restore optional Supreme Values browser session
+        working-directory: MM2 Values
+        env:
+          MM2_BROWSER_STORAGE_STATE_B64: ${{ secrets.MM2_BROWSER_STORAGE_STATE_B64 }}
+        run: |
+          if [ -n "$MM2_BROWSER_STORAGE_STATE_B64" ]; then
+            mkdir -p data
+            printf '%s' "$MM2_BROWSER_STORAGE_STATE_B64" | base64 --decode > data/browser-state.json
+            chmod 600 data/browser-state.json
+            echo "Restored the browser session from the encrypted Actions secret."
+          else
+            echo "No browser-state secret configured; using a fresh browser session."
+          fi
+
       - name: Collect current values from Supreme Values
         working-directory: MM2 Values
         env:
-          SOURCE_HEADLESS: "true"
+          SOURCE_HEADLESS: "false"
           SOURCE_TIMEOUT_MS: "90000"
-          SOURCE_DELAY_MS: "750"
+          SOURCE_DELAY_MS: "10000"
           LOG_LEVEL: info
-        run: npm run refresh:static
+        run: xvfb-run --auto-servernum npm run refresh:static
 
       - name: Update the dataset bundled with the Vercel app
         run: node scripts/sync-mm2-values.mjs

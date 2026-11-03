@@ -57,6 +57,7 @@ export const config = Object.freeze({
   sourceTimeoutMs: integer("SOURCE_TIMEOUT_MS", 90_000, 1_000),
   sourceDelayMs: integer("SOURCE_DELAY_MS", 750, 0),
   browserProfileDir: path.resolve(process.env.BROWSER_PROFILE_DIR || "data/browser-profile"),
+  browserStorageStateFile: path.resolve(process.env.BROWSER_STORAGE_STATE_FILE || "data/browser-state.json"),
   browserExecutablePath: process.env.BROWSER_EXECUTABLE_PATH || undefined,
   cacheFile: path.resolve(process.env.CACHE_FILE || "data/cache.json"),
   logLevel: (process.env.LOG_LEVEL || "info").toLowerCase(),

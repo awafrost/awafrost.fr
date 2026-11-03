@@ -2,6 +2,7 @@ node_modules/
 .npm-cache/
 .env
 data/browser-profile/
+data/browser-state.json
 data/cache.json
 data/cache.json.tmp
 npm-debug.log*

@@ -123,10 +123,19 @@ Push-Location 'MM2 Values'
 npm ci
 npx playwright install chromium
 Pop-Location
+pnpm mm2:login
 pnpm mm2:refresh
 ```
 
-Pour un rafraîchissement local des données déjà collectées, sans lancer Chromium, utiliser `pnpm mm2:sync`. Si la source ne répond pas ou si une collecte est incomplète, le dernier snapshot valide est conservé. Les entrées Godly sentinelles Batwing, Black Luger et Mortal Blade sont écartées lors de la synchronisation.
+`pnpm mm2:login` ouvre Chromium afin de résoudre, si besoin, le challenge Supreme Values et enregistre localement la session dans `MM2 Values/data/browser-state.json`. Si le workflow planifié reçoit encore HTTP 403, exécute localement la commande ci-dessous et colle son résultat directement dans **GitHub → Settings → Secrets and variables → Actions** sous le nom `MM2_BROWSER_STORAGE_STATE_B64` :
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes('MM2 Values/data/browser-state.json'))
+```
+
+Ne commite pas ce fichier et ne partage pas sa valeur dans un chat. Les cookies peuvent expirer; refais `pnpm mm2:login` et mets à jour le secret. Si Supreme lie aussi ses cookies à l’adresse IP, le workflow devra être autorisé par la source ou exécuté depuis une machine/réseau autorisé.
+
+Pour recopier sans relancer Chromium le dernier snapshot déjà collecté, utiliser `pnpm mm2:sync`. Si la source ne répond pas ou si une collecte est incomplète, le dernier snapshot valide est conservé. Les entrées Godly sentinelles Batwing, Black Luger et Mortal Blade sont écartées lors de la synchronisation.
 
 ### Vercel (Recommandé)
 
