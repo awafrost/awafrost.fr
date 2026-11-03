@@ -60,11 +60,14 @@ export function createBrowserLoader(options, logger) {
           });
           if (response?.ok()) break;
           if (!response) throw new Error(`Navigation returned no response for ${url}`);
-          if (response.status() !== 403 || attempt === 3) {
+          if (response.status() === 403) {
+            throw new Error(`Supreme Values denied automated access (HTTP 403) for ${url}; no retry will be sent.`);
+          }
+          if (attempt === 3 || response.status() < 500) {
             throw new Error(`Source returned HTTP ${response.status()} for ${url}`);
           }
-          logger.warn("Source returned 403; retrying after cooldown", { category, attempt });
-          await sleep(Math.max(options.sourceDelayMs, 10_000));
+          logger.warn("Source returned a server error; retrying after cooldown", { category, attempt, status: response.status() });
+          await sleep(Math.max(options.sourceDelayMs, 10_000) * attempt);
         }
 
         try {
