@@ -48,6 +48,10 @@ pnpm dev
 # Optionnel - pour le déploiement Vercel
 NEXT_PUBLIC_VERCEL_URL=votre-domaine.com
 PORT=3000
+
+# Requis pour récupérer les valeurs MM2 depuis l'API RBLXValue v2
+# À définir uniquement côté serveur (jamais avec le préfixe NEXT_PUBLIC_)
+RBLXVALUE_API_KEY=votre-cle-api
 ```
 
 ### Personnaliser le profil
@@ -114,28 +118,7 @@ src/
 
 ### Valeurs Murder Mystery 2
 
-Le dossier `MM2 Values/` contient le collecteur et son snapshot de secours. Le workflow GitHub Actions `Refresh local MM2 values` lit directement les pages Supreme Values toutes les 10 minutes, 24 h/24, met à jour `data/mm2-values.json` et commit uniquement si les données changent. Vercel déploie ensuite ce fichier avec le site : les visiteurs et l’API du site ne contactent ni le dépôt de données ni la source Supreme. GitHub peut retarder un job planifié et la cadence dépend aussi de la publication de la source; ce n’est donc pas du temps réel à la seconde.
-
-Pour lancer une mise à jour manuellement sur un poste local :
-
-```powershell
-Push-Location 'MM2 Values'
-npm ci
-npx playwright install chromium
-Pop-Location
-pnpm mm2:login
-pnpm mm2:refresh
-```
-
-`pnpm mm2:login` ouvre Chromium afin de résoudre, si Supreme affiche un challenge interactif, et enregistre la session dans `MM2 Values/data/browser-state.json`. Si la page se charge après cette validation, exécute localement la commande ci-dessous et colle son résultat directement dans **GitHub → Settings → Secrets and variables → Actions** sous le nom `MM2_BROWSER_STORAGE_STATE_B64` :
-
-```powershell
-[Convert]::ToBase64String([IO.File]::ReadAllBytes('MM2 Values/data/browser-state.json'))
-```
-
-Ne commite pas ce fichier et ne partage pas sa valeur dans un chat. Les cookies peuvent expirer; refais `pnpm mm2:login` et mets à jour le secret. Si Cloudflare refuse l’adresse IP du runner avec HTTP 403, les cookies ne suffiront pas : il faut une autorisation/allowlist de Supreme ou une source de valeurs autorisée différente.
-
-Pour recopier sans relancer Chromium le dernier snapshot déjà collecté, utiliser `pnpm mm2:sync`. Si la source ne répond pas ou si une collecte est incomplète, le dernier snapshot valide est conservé. Les entrées Godly sentinelles Batwing, Black Luger et Mortal Blade sont écartées lors de la synchronisation.
+Configure `RBLXVALUE_API_KEY` côté serveur dans `.env.local` et dans les variables d’environnement de l’hébergeur. La clé ne doit jamais être exposée dans le navigateur ni préfixée par `NEXT_PUBLIC_`.
 
 ### Vercel (Recommandé)
 

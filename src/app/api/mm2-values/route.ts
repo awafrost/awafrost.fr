@@ -1,40 +1,30 @@
-import { readFile, stat } from 'node:fs/promises';
-import path from 'node:path';
-
-interface SupremeValuesDataset {
-  source: string;
-  fetchedAt: string;
-  categoryCount: number;
-  count: number;
-  items: Array<Record<string, unknown>>;
-  localSyncedAt?: string;
-}
+import { getLastGoodRblxValueDataset, getRblxValueDataset } from '@/lib/rblxvalue';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const localValuesFile = path.join(process.cwd(), 'data', 'mm2-values.json');
-
 export async function GET() {
-  try {
-    const [fileContents, fileInfo] = await Promise.all([
-      readFile(localValuesFile, 'utf8'),
-      stat(localValuesFile),
-    ]);
-    const dataset = JSON.parse(fileContents) as SupremeValuesDataset;
-  if (!Array.isArray(dataset.items) || dataset.items.length === 0 || !dataset.fetchedAt) {
-      throw new Error('Le fichier local des valeurs est vide ou invalide.');
-  }
-    return Response.json({
-      ...dataset,
-      localSyncedAt: dataset.localSyncedAt ?? fileInfo.mtime.toISOString(),
-    }, {
+  const apiKey = process.env.RBLXVALUE_API_KEY;
+  if (!apiKey) {
+    return Response.json({ error: 'Le service de valeurs est momentanément indisponible.' }, {
+      status: 503,
       headers: { 'Cache-Control': 'no-store' },
     });
+  }
+
+  try {
+    const dataset = await getRblxValueDataset(apiKey);
+    return Response.json(dataset, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
-    console.error('Unable to read local Supreme Values MM2 dataset:', error);
-    return Response.json({
-      error: 'La copie locale des valeurs MM2 est absente. Lance la synchronisation des valeurs puis redémarre le site.',
-    }, { status: 503, headers: { 'Cache-Control': 'no-store' } });
+    const message = error instanceof Error ? error.message : 'Erreur inconnue pendant le chargement des valeurs.';
+    console.error('Unable to fetch MM2 value dataset:', message);
+    const lastGoodDataset = getLastGoodRblxValueDataset();
+    if (lastGoodDataset) {
+      return Response.json(lastGoodDataset, { headers: { 'Cache-Control': 'no-store' } });
+    }
+    return Response.json({ error: message }, {
+      status: 503,
+      headers: { 'Cache-Control': 'no-store' },
+    });
   }
 }

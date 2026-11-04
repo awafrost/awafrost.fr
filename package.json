@@ -6,10 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "mm2:sync": "node scripts/sync-mm2-values.mjs",
-    "mm2:refresh": "npm --prefix \"MM2 Values\" run refresh:static && node scripts/sync-mm2-values.mjs",
-    "mm2:login": "npm --prefix \"MM2 Values\" run browser:login"
+    "lint": "next lint"
   },
   "dependencies": {
     "@nextui-org/react": "2.1.13",
@@ -35,6 +32,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "zod": "^4.6.7"
   }
 }
