@@ -32,9 +32,9 @@ export default function ConfidentialitePage() {
           {/* Content */}
           <div className='space-y-12'>
             <FadeUpDiv className='document-section space-y-4 py-4'>
-              <h2 className='text-2xl font-bold text-white'>Aucune donnée stockée</h2>
+              <h2 className='text-2xl font-bold text-white'>Données affichées</h2>
               <p className='text-gray-400 leading-relaxed'>
-                Ce site ne collecte, ne stocke et ne traite <span className='font-bold text-white'>aucune donnée personnelle</span>. Pas d&apos;email, pas de nom, pas de cookies de suivi, rien. C&apos;est un site statique qui affiche juste mon profil Roblox public.
+                Le site affiche des informations publiques de mon profil Roblox et des valeurs d&apos;objets MM2. Les données de Roblox et les valeurs MM2 sont récupérées auprès de leurs services respectifs afin d&apos;afficher les pages.
               </p>
             </FadeUpDiv>
 
@@ -42,43 +42,42 @@ export default function ConfidentialitePage() {
               <h2 className='text-2xl font-bold text-white'>Ce que tu vois sur ce site</h2>
               <div className='space-y-4 text-gray-400'>
                 <p>
-                  Les informations affichées proviennent uniquement de l&apos;API publique de Roblox :
+                  Les informations publiques de Roblox affichées peuvent inclure :
                 </p>
                 <ul className='list-disc list-inside space-y-2 text-sm'>
                   <li>Mon profil public Roblox (nom, description, avatar)</li>
                   <li>Mes jeux favoris</li>
                   <li>Informations sur mon groupe Roblox</li>
+                  <li>Des informations sur les objets de Murder Mystery 2, fournies par RBLXValue</li>
                 </ul>
                 <p className='text-xs text-gray-500 font-mono mt-4'>
-                  Ces données sont publiques sur Roblox et ne posent aucun risque de confidentialité.
+                  Ces services tiers traitent les requêtes selon leurs propres politiques de confidentialité.
                 </p>
               </div>
             </FadeUpDiv>
 
             <FadeUpDiv className='document-section space-y-6 py-4'>
-              <h2 className='text-2xl font-bold text-white'>Cookies & Suivi</h2>
+              <h2 className='text-2xl font-bold text-white'>Cookie de préférences</h2>
               <p className='text-gray-400 leading-relaxed'>
-                Ce site n&apos;utilise pas de cookies de suivi, pas de Google Analytics, pas de publicités. Zéro tracking. Tu peux naviguer tranquille.
+                La page du comparateur MM2 utilise un cookie fonctionnel, stocké dans ton navigateur pendant 180 jours. Il mémorise ta recherche, tes filtres et les objets choisis des deux côtés du trade pour retrouver ta dernière comparaison. Il n&apos;est pas utilisé pour le suivi publicitaire. Tu peux le supprimer dans les paramètres de cookies de ton navigateur.
+              </p>
+              <p className='text-gray-400 leading-relaxed'>
+                Le site n&apos;intègre pas d&apos;outil d&apos;analyse d&apos;audience ni de publicité. L&apos;hébergeur peut toutefois traiter des données techniques nécessaires au fonctionnement et à la sécurité du site, conformément à sa propre politique.
               </p>
             </FadeUpDiv>
 
             <FadeUpDiv className='document-section space-y-6 py-4'>
-              <h2 className='text-2xl font-bold text-white'>Tes droits</h2>
-              <p className='text-gray-400 leading-relaxed mb-4'>
-                Puisque aucune donnée n&apos;est collectée, tes droits de confidentialité sont d&apos;office respectés. Mais dans le contexte du RGPD :
+              <h2 className='text-2xl font-bold text-white'>Demandes de suppression de vidéo</h2>
+              <p className='text-gray-400 leading-relaxed'>
+                Si tu utilises le formulaire de la page d&apos;accueil, le lien TikTok fourni et le motif écrit sont transmis à un webhook Discord privé afin que la demande puisse être examinée. N&apos;ajoute pas d&apos;informations sensibles ou de données personnelles qui ne sont pas nécessaires. Le site ne conserve pas de copie des demandes dans une base de données ; Discord et l&apos;hébergeur peuvent traiter les informations selon leurs propres politiques et durées de conservation.
               </p>
-              <ul className='list-disc list-inside space-y-2 text-sm text-gray-400'>
-                <li>Tu n&apos;as rien à me demander d&apos;oublier (je ne stocke rien)</li>
-                <li>Tu n&apos;as pas à t&apos;inquiéter du contrôle de tes données (y&apos;en a pas)</li>
-                <li>Tu es 100% en sécurité sur ce site</li>
-              </ul>
             </FadeUpDiv>
 
             <FadeUpDiv className='document-section space-y-6 py-4'>
-              <h2 className='text-2xl font-bold text-white'>Contact</h2>
+              <h2 className='text-2xl font-bold text-white'>Tes demandes et tes droits</h2>
               <div className='space-y-3'>
                 <p className='text-gray-400'>
-                  Si tu as des questions sur cette politique :
+                  Pour poser une question sur cette politique ou demander la suppression des informations envoyées via le formulaire, contacte-moi sur Discord. Une demande de retrait de vidéo n&apos;est pas une garantie de suppression sur TikTok ; la plateforme peut aussi être contactée directement.
                 </p>
                 <div className='document-callout'>
                   <p className='text-white font-mono text-sm'>Discord : @awafrost</p>
@@ -89,7 +88,7 @@ export default function ConfidentialitePage() {
             <FadeUpDiv className='document-section space-y-4 py-4'>
               <h2 className='text-xl font-bold text-white'>Résumé simple</h2>
               <p className='text-gray-400 leading-relaxed text-sm'>
-                Ce site est une présentation personnelle, pas une plateforme. Il montre principalement des informations publiques sur mon profil. Aucune collecte de données. Aucun suivi. C&apos;est transparent et c&apos;est bon pour toi.
+                Le comparateur garde tes préférences dans un cookie fonctionnel. Le formulaire transmet le lien TikTok et le motif de ta demande à Discord pour traitement. Pas de publicité ni d&apos;outil d&apos;analyse d&apos;audience.
               </p>
             </FadeUpDiv>
           </div>

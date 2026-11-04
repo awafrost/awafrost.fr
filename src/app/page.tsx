@@ -5,6 +5,7 @@ import { RobloxAvatar } from '@/components/roblox-avatar';
 import { RobloxDashboard } from '@/components/roblox-dashboard';
 import { ProfileModal } from '@/components/profile-modal';
 import { WelcomeMessage } from '@/components/welcome-message';
+import { VideoRemovalRequest } from '@/components/video-removal-request';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import {
@@ -135,6 +136,10 @@ export default function Home() {
       />
 
       <WelcomeMessage />
+
+      <div className='container mx-auto flex max-w-6xl justify-center px-6 pb-8'>
+        <VideoRemovalRequest />
+      </div>
 
       {/* Footer */}
       <footer className='site-footer py-12 sm:py-20'>

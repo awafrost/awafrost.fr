@@ -52,6 +52,10 @@ PORT=3000
 # Requis pour récupérer les valeurs MM2 depuis l'API RBLXValue v2
 # À définir uniquement côté serveur (jamais avec le préfixe NEXT_PUBLIC_)
 RBLXVALUE_API_KEY=votre-cle-api
+
+# Requis pour recevoir les demandes de suppression de vidéos sur Discord
+# URL d'un webhook privé (ne jamais utiliser le préfixe NEXT_PUBLIC_)
+DISCORD_VIDEO_REMOVAL_WEBHOOK_URL=https://discord.com/api/webhooks/...
 ```
 
 ### Personnaliser le profil
