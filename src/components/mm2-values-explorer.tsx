@@ -55,6 +55,7 @@ function isTrophy(item: MM2ValueItem) {
   const details = [item.name, item.itemType ?? '', ...(item.aliases ?? [])].join(' ').toLocaleLowerCase('fr');
   return category === 'evo'
     || /troph|leaderboard/.test(`${category} ${details}`)
+    || /slouse[’']s clown|nik[’']s scythe/.test(details)
     || /^(?:bronze|blue|red|silver|gold|bornze)(?:\s|$)/i.test(item.name);
 }
 
